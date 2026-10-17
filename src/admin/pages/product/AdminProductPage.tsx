@@ -1,11 +1,14 @@
+import {useState} from 'react';
 import {Link, Navigate, useParams} from 'react-router';
 import {ArrowLeft} from 'lucide-react';
 import {AdminTitle} from '@/admin/components/AdminTitle';
 import {useProduct} from '@/admin/hooks/products/useProduct';
 import {useReorderProductVariants} from '@/admin/hooks/products/useReorderProductVariants';
 import {useToggleProductVariantActive} from '@/admin/hooks/products/useToggleProductVariantActive';
+import type {ProductVariant} from '@/admin/interfaces/product-variant.interface';
 import {buttonVariants, Button} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';
+import {DeleteVariantDialog} from './ui/DeleteVariantDialog';
 import {ProductVariantsTable} from './ui/ProductVariantsTable';
 
 export const AdminProductPage = () => {
@@ -24,6 +27,8 @@ const AdminProductContent = ({productId}: AdminProductContentProps) => {
 	const {data: product, isLoading, isError} = useProduct(productId);
 	const {mutate: toggleActive} = useToggleProductVariantActive(productId);
 	const {mutate: reorder} = useReorderProductVariants(productId);
+	const [variantToDelete, setVariantToDelete] =
+		useState<ProductVariant | null>(null);
 
 	const handleToggleActive = (id: string, isActive: boolean) => {
 		toggleActive({id, isActive});
@@ -32,6 +37,11 @@ const AdminProductContent = ({productId}: AdminProductContentProps) => {
 	const handleReorder = (orderedIds: string[]) => {
 		reorder({orderedIds});
 	};
+
+	const activeVariantCount =
+		product?.variants.filter((variant) => variant.isActive).length ?? 0;
+	const isOnlyActiveVariant =
+		!!variantToDelete?.isActive && activeVariantCount === 1;
 
 	return (
 		<div className='flex flex-col gap-5'>
@@ -102,6 +112,14 @@ const AdminProductContent = ({productId}: AdminProductContentProps) => {
 						variants={product.variants}
 						onToggleActive={handleToggleActive}
 						onReorder={handleReorder}
+						onDeleteVariant={setVariantToDelete}
+					/>
+
+					<DeleteVariantDialog
+						productId={productId}
+						variant={variantToDelete}
+						isOnlyActiveVariant={isOnlyActiveVariant}
+						onClose={() => setVariantToDelete(null)}
 					/>
 				</>
 			)}

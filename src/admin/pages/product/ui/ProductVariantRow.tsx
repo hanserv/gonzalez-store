@@ -4,6 +4,7 @@ import {
 	ArrowUpIcon,
 	ImageOffIcon,
 	PencilIcon,
+	Trash2Icon,
 } from 'lucide-react';
 import {Button, buttonVariants} from '@/components/ui/button';
 import {TableCell, TableRow} from '@/components/ui/table';
@@ -23,6 +24,7 @@ interface ProductVariantRowProps {
 	onMoveUp: () => void;
 	onMoveDown: () => void;
 	onToggleActive: (isActive: boolean) => void;
+	onDeleteClick: () => void;
 }
 
 export const ProductVariantRow = ({
@@ -34,6 +36,7 @@ export const ProductVariantRow = ({
 	onMoveUp,
 	onMoveDown,
 	onToggleActive,
+	onDeleteClick,
 }: ProductVariantRowProps) => {
 	const totalStock = variant.sizes.reduce((sum, size) => sum + size.stock, 0);
 	const coverImage = variant.images[0];
@@ -122,6 +125,15 @@ export const ProductVariantRow = ({
 				>
 					<PencilIcon className='size-4 text-blue-500' />
 				</Link>
+				<Button
+					type='button'
+					variant='ghost'
+					size='icon'
+					aria-label={`Eliminar ${variant.name}`}
+					onClick={onDeleteClick}
+				>
+					<Trash2Icon className='size-4 text-destructive' />
+				</Button>
 			</TableCell>
 		</TableRow>
 	);
