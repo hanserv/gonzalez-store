@@ -11,6 +11,6 @@ export interface MenuItem {
 export const menuItems: MenuItem[] = [
 	{icon: Home, label: 'Dashboard', to: '/admin', end: true},
 	{icon: Tags, label: 'Categorías', to: '/admin/categories'},
-	{icon: ShoppingBag, label: 'Productos', to: '/admin/products'},
 	{icon: Crown, label: 'Marcas', to: '/admin/brands'},
+	{icon: ShoppingBag, label: 'Productos', to: '/admin/products'},
 ];
