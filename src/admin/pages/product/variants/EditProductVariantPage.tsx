@@ -1,9 +1,10 @@
-import {Navigate, useNavigate, useParams} from 'react-router';
+import {Link, Navigate, useNavigate, useParams} from 'react-router';
 import {AdminTitle} from '@/admin/components/AdminTitle';
 import {useProduct} from '@/admin/hooks/products/useProduct';
 import {useProductVariant} from '@/admin/hooks/products/useProductVariant';
 import {useUpdateProductVariant} from '@/admin/hooks/products/useUpdateProductVariant';
 import type {ProductVariantFormValues} from '@/admin/schemas/product-variant.schema';
+import {buttonVariants} from '@/components/ui/button';
 import {ProductVariantForm} from './ui/ProductVariantForm';
 
 export const EditProductVariantPage = () => {
@@ -71,6 +72,12 @@ const EditProductVariantContent = ({
 					<p className='text-sm text-muted-foreground'>
 						No se encontró la variante.
 					</p>
+					<Link
+						to={`/admin/products/${productId}`}
+						className={buttonVariants({variant: 'outline', size: 'sm'})}
+					>
+						Volver al producto
+					</Link>
 				</div>
 			)}
 
