@@ -151,7 +151,7 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 
 - Terminado: categories (CRUD completo), login y layout de auth.
 - Brands: CRUD completo, lista en admin, formularios, rutas `/admin/brands` y menú lateral listos.
-- Productos: Etapa 1 (productos), Etapa 2 (variantes con tallas), Etapa 3 (imágenes) y ajuste "producto popular" terminados. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
+- Productos: Etapa 1 (productos), Etapa 2 (variantes con tallas), Etapa 3 (imágenes), ajuste "producto popular" y ajuste de borrado de variantes terminados. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
 - Después: panel rápido de stock (Etapa 4), tienda pública (Etapa 5) y carrito y checkout (Etapa 6).
   Actualiza esta sección al terminar cada etapa.
 

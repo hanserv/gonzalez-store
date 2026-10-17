@@ -14,6 +14,7 @@ interface ProductVariantsTableProps {
 	variants: ProductVariant[];
 	onToggleActive: (id: string, isActive: boolean) => void;
 	onReorder: (orderedIds: string[]) => void;
+	onDeleteVariant: (variant: ProductVariant) => void;
 }
 
 export const ProductVariantsTable = ({
@@ -21,6 +22,7 @@ export const ProductVariantsTable = ({
 	variants,
 	onToggleActive,
 	onReorder,
+	onDeleteVariant,
 }: ProductVariantsTableProps) => {
 	const sortedVariants = variants
 		.slice()
@@ -79,6 +81,7 @@ export const ProductVariantsTable = ({
 							onMoveUp={() => moveVariant(index, -1)}
 							onMoveDown={() => moveVariant(index, 1)}
 							onToggleActive={(isActive) => onToggleActive(variant.id, isActive)}
+							onDeleteClick={() => onDeleteVariant(variant)}
 						/>
 					))
 				)}

@@ -46,7 +46,7 @@ El SQL vive en `docs/sql/01-products-schema.sql` y `docs/sql/02-storage-policies
 - No se puede borrar la última imagen de una variante activa; primero se desactiva.
 - Se avisa, sin bloquear, si una variante activa no tiene ninguna talla con stock.
 - El stock lo ajusta el admin a mano. No hay descuento automático.
-- La baja normal es `is_active = false`. El borrado real pide confirmación, indica cuánto se pierde y elimina primero los archivos del bucket y luego las filas.
+- La baja normal es `is_active = false`. El borrado real de una variante se permite aunque esté activa, pide confirmación (indica cuántas imágenes y tallas se pierden y avisa si es la única variante activa del producto) y elimina primero los archivos del bucket y luego las filas. Antes de borrar las filas se comprueba que la carpeta `variants/{variant_id}` quedó vacía, para que un reintento tras un fallo parcial no se bloquee.
 - El slug de la variante se propone a partir de "nombre del producto + nombre de la variante", es editable y sigue la regex de brands (minúsculas, números y guiones).
 - Las tallas son texto ("9.5", "M"). El orden de presentación lo resuelve la interfaz con listas predefinidas (numeración para tenis, S a XL para camisetas), no la base de datos.
 - Los precios se muestran en pesos dominicanos (`DOP`) con formato `es-DO`.
@@ -66,7 +66,7 @@ El SQL vive en `docs/sql/01-products-schema.sql` y `docs/sql/02-storage-policies
 ## Errores de negocio
 
 - `ProductError`: `duplicate_name`, `not_found`.
-- `ProductVariantError`: `duplicate_slug`, `duplicate_name`, `image_required`, `not_found`.
+- `ProductVariantError`: `duplicate_slug`, `duplicate_name`, `image_required`, `delete_failed`, `not_found`.
 - `VariantImageError`: `invalid_type`, `too_large`, `upload_failed`, `delete_failed`, `reorder_failed`, `active_variant`, `not_found`. Los errores de imágenes (tipo o tamaño inválido, fallo de subida o borrado) se tratan en la capa de subida con mensajes en español.
 
 ## Admin
@@ -81,7 +81,7 @@ Rutas bajo `/admin`:
 Pantallas:
 
 - **Lista**: miniatura de portada, nombre, marca, categoría, cantidad de variantes y stock total. Filtros por marca, categoría y búsqueda por nombre. Aviso en los productos sin variantes activas. Insignia "Popular" junto al nombre cuando aplica.
-- **Detalle del producto**: datos del producto arriba. Debajo, la lista de variantes con miniatura, nombre, precio, descuento, interruptor de activa y resumen de stock. La primera lleva la insignia "Portada". Flechas de subir y bajar cambian el orden. Botón "Agregar variante".
+- **Detalle del producto**: datos del producto arriba. Debajo, la lista de variantes con miniatura, nombre, precio, descuento, interruptor de activa y resumen de stock. La primera lleva la insignia "Portada". Flechas de subir y bajar cambian el orden. Botón "Agregar variante". Cada variante tiene un botón de eliminar con confirmación.
 - **Formulario de variante**: tres tarjetas blancas separadas. Datos de la variante (nombre, slug, descripción, precio y descuento) a la izquierda, imágenes a su derecha y tallas con stock debajo de los datos.
 - Al crear, se guardan datos y tallas, y se redirige a la edición de la misma variante, donde se habilita la galería (porque la ruta del archivo lleva el id de la variante).
 - El estado activo no se edita aquí: se cambia con el interruptor del detalle del producto.
@@ -105,6 +105,7 @@ Cada etapa lleva datos, hooks y pantallas, y debe poder probarse al terminar. Im
 - [x] Etapa 2, variantes con tallas: detalle del producto con lista de variantes y formulario de variante (datos y tallas).
 - [x] Etapa 3, imágenes: galería de la variante con subida, orden y borrado, compresión en el cliente y limpieza del bucket.
 - [x] Ajuste, producto popular: columna `is_popular` en `01-products-schema.sql`, interface, mapper, interruptor en la lista e insignia en la lista del admin. La etiqueta de la tienda se hace en la etapa 5.
+- [x] Ajuste, borrado de variantes: `deleteProductVariantAction` (archivos del bucket y luego filas) y botón con confirmación en el detalle del producto.
 - [ ] Etapa 4, panel rápido de stock.
 - [ ] Etapa 5, tienda: card del catálogo y página de variante con carrusel.
 - [ ] Etapa 6, carrito y checkout (decisión pendiente: pedido por WhatsApp o tablas de pedidos).
