@@ -13,6 +13,7 @@ export const useDeleteProduct = () => {
 		mutationFn: deleteProductAction,
 		onSuccess: () => {
 			queryClient.invalidateQueries({queryKey: ['products']});
+			queryClient.invalidateQueries({queryKey: ['dashboard']});
 			toast.success('Producto eliminado correctamente.');
 		},
 		onError: (error) => {

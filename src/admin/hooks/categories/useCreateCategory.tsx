@@ -13,6 +13,7 @@ export const useCreateCategory = () => {
 		mutationFn: createCategoryAction,
 		onSuccess: () => {
 			queryClient.invalidateQueries({queryKey: ['categories']});
+			queryClient.invalidateQueries({queryKey: ['dashboard']});
 			toast.success('Categoría creada correctamente.');
 		},
 		onError: (error) => {

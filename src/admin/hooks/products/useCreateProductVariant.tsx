@@ -17,6 +17,7 @@ export const useCreateProductVariant = () => {
 					queryKey: ['products', variant.productId],
 				}),
 				queryClient.invalidateQueries({queryKey: ['products']}),
+				queryClient.invalidateQueries({queryKey: ['dashboard']}),
 			]);
 			toast.success('Variante creada correctamente.');
 		},

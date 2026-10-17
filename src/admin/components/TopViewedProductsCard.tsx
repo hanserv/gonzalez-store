@@ -16,6 +16,9 @@ export const TopViewedProductsCard = ({
 		<Card>
 			<CardHeader>
 				<CardTitle>Productos más vistos</CardTitle>
+				<span className='mt-1 w-fit rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700'>
+					Datos de ejemplo
+				</span>
 			</CardHeader>
 			<CardContent>
 				{products.length === 0 ? (
