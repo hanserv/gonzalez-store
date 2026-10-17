@@ -12,7 +12,10 @@ export const useToggleProductPopular = () => {
 	return useMutation({
 		mutationFn: toggleProductPopularAction,
 		onSuccess: async () => {
-			await queryClient.invalidateQueries({queryKey: ['products']});
+			await Promise.all([
+				queryClient.invalidateQueries({queryKey: ['products']}),
+				queryClient.invalidateQueries({queryKey: ['dashboard']}),
+			]);
 			toast.success('Estado popular actualizado.');
 		},
 		onError: (error) => {

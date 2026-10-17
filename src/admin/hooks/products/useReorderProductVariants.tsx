@@ -11,6 +11,7 @@ export const useReorderProductVariants = (productId: string) => {
 			await Promise.all([
 				queryClient.invalidateQueries({queryKey: ['products', productId]}),
 				queryClient.invalidateQueries({queryKey: ['products']}),
+				queryClient.invalidateQueries({queryKey: ['dashboard']}),
 			]);
 		},
 		onError: () => {

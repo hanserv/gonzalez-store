@@ -20,6 +20,7 @@ export const useUpdateProductVariant = () => {
 					queryKey: ['products', variant.productId],
 				}),
 				queryClient.invalidateQueries({queryKey: ['products']}),
+				queryClient.invalidateQueries({queryKey: ['dashboard']}),
 			]);
 			toast.success('Variante actualizada correctamente.');
 		},

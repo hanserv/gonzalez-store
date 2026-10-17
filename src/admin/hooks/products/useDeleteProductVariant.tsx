@@ -12,9 +12,12 @@ export const useDeleteProductVariant = (productId: string) => {
 	return useMutation({
 		mutationFn: deleteProductVariantAction,
 		onSuccess: async () => {
-			await queryClient.invalidateQueries({
-				queryKey: ['products', productId],
-			});
+			await Promise.all([
+				queryClient.invalidateQueries({
+					queryKey: ['products', productId],
+				}),
+				queryClient.invalidateQueries({queryKey: ['dashboard']}),
+			]);
 			toast.success('Variante eliminada.');
 		},
 		onError: (error) => {

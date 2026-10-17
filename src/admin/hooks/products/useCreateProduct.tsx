@@ -13,6 +13,7 @@ export const useCreateProduct = () => {
 		mutationFn: createProductAction,
 		onSuccess: () => {
 			queryClient.invalidateQueries({queryKey: ['products']});
+			queryClient.invalidateQueries({queryKey: ['dashboard']});
 			toast.success('Producto creado correctamente.');
 		},
 		onError: (error) => {

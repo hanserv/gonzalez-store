@@ -15,6 +15,7 @@ export const useToggleProductVariantActive = (productId: string) => {
 			await Promise.all([
 				queryClient.invalidateQueries({queryKey: ['products', productId]}),
 				queryClient.invalidateQueries({queryKey: ['products']}),
+				queryClient.invalidateQueries({queryKey: ['dashboard']}),
 			]);
 			toast.success('Estado de la variante actualizado.');
 		},

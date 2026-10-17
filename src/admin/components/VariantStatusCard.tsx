@@ -1,14 +1,14 @@
 import {Card, CardContent} from '@/components/ui/card';
 
-interface ProductStatusCardProps {
+interface VariantStatusCardProps {
 	active: number;
 	inactive: number;
 }
 
-export const ProductStatusCard = ({
+export const VariantStatusCard = ({
 	active,
 	inactive,
-}: ProductStatusCardProps) => {
+}: VariantStatusCardProps) => {
 	const total = active + inactive;
 	const activePercent = total === 0 ? 0 : Math.round((active / total) * 100);
 
@@ -16,8 +16,10 @@ export const ProductStatusCard = ({
 		<Card>
 			<CardContent className='flex flex-col gap-3'>
 				<div className='flex items-baseline justify-between'>
-					<p className='text-sm text-muted-foreground'>Activos vs. inactivos</p>
-					<p className='text-sm font-semibold'>{activePercent}% activos</p>
+					<p className='text-sm text-muted-foreground'>
+						Variantes activas vs. inactivas
+					</p>
+					<p className='text-sm font-semibold'>{activePercent}% activas</p>
 				</div>
 
 				<div
@@ -26,7 +28,7 @@ export const ProductStatusCard = ({
 					aria-valuenow={activePercent}
 					aria-valuemin={0}
 					aria-valuemax={100}
-					aria-label='Porcentaje de productos activos'
+					aria-label='Porcentaje de variantes activas'
 				>
 					<div
 						className='h-full rounded-full bg-black transition-all'
@@ -36,10 +38,10 @@ export const ProductStatusCard = ({
 
 				<div className='flex justify-between text-sm'>
 					<span>
-						<span className='font-bold'>{active}</span> activos
+						<span className='font-bold'>{active}</span> activas
 					</span>
 					<span className='text-muted-foreground'>
-						<span className='font-bold'>{inactive}</span> inactivos
+						<span className='font-bold'>{inactive}</span> inactivas
 					</span>
 				</div>
 			</CardContent>
