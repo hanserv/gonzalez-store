@@ -1,5 +1,5 @@
 import {AlertTriangle, FolderTree, Percent, ShoppingBag} from 'lucide-react';
-import {useDashboardData} from '@/admin/hooks/useDashboardData';
+import {useDashboardData} from '@/admin/hooks/dashboard/useDashboardData';
 import {StatCard} from '@/admin/components/StatCard';
 import {ProductStatusCard} from '@/admin/components/ProductStatusCard';
 import {RecentProductsCard} from '@/admin/components/RecentProductsCard';

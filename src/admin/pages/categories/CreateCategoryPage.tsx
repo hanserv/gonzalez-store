@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router';
 import {AdminTitle} from '@/admin/components/AdminTitle';
-import {useCreateCategory} from '@/admin/hooks/useCreateCategory';
+import {useCreateCategory} from '@/admin/hooks/categories/useCreateCategory';
 import type {CategoryInput} from '@/admin/interfaces/category.interface';
 import {CategoryForm} from './ui/CategoryForm';
 

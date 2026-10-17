@@ -1,5 +1,5 @@
 import {Loader2} from 'lucide-react';
-import {useDeleteCategory} from '@/admin/hooks/useDeleteCategory';
+import {useDeleteCategory} from '@/admin/hooks/categories/useDeleteCategory';
 import type {Category} from '@/admin/interfaces/category.interface';
 import {Button} from '@/components/ui/button';
 import {

@@ -1,7 +1,7 @@
 import {Link, Navigate, useNavigate, useParams} from 'react-router';
 import {AdminTitle} from '@/admin/components/AdminTitle';
-import {useBrand} from '@/admin/hooks/useBrand';
-import {useUpdateBrand} from '@/admin/hooks/useUpdateBrand';
+import {useBrand} from '@/admin/hooks/brands/useBrand';
+import {useUpdateBrand} from '@/admin/hooks/brands/useUpdateBrand';
 import type {BrandInput} from '@/admin/interfaces/brand.interface';
 import {buttonVariants} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';

@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router';
 import {AdminTitle} from '@/admin/components/AdminTitle';
-import {useCreateBrand} from '@/admin/hooks/useCreateBrand';
+import {useCreateBrand} from '@/admin/hooks/brands/useCreateBrand';
 import type {BrandInput} from '@/admin/interfaces/brand.interface';
 import {BrandForm} from './ui/BrandForm';
 

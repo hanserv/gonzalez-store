@@ -1,6 +1,6 @@
 import {PencilIcon, PlusIcon, Trash2Icon} from 'lucide-react';
 import {AdminTitle} from '@/admin/components/AdminTitle';
-import {useCategories} from '@/admin/hooks/useCategories';
+import {useCategories} from '@/admin/hooks/categories/useCategories';
 import {Button, buttonVariants} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';
 import {

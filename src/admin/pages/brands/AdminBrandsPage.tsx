@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Link} from 'react-router';
 import {PencilIcon, PlusIcon, Trash2Icon} from 'lucide-react';
 import {AdminTitle} from '@/admin/components/AdminTitle';
-import {useBrands} from '@/admin/hooks/useBrands';
+import {useBrands} from '@/admin/hooks/brands/useBrands';
 import type {Brand} from '@/admin/interfaces/brand.interface';
 import {Button, buttonVariants} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';

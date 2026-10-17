@@ -1,5 +1,5 @@
 import {Loader2} from 'lucide-react';
-import {useDeleteBrand} from '@/admin/hooks/useDeleteBrand';
+import {useDeleteBrand} from '@/admin/hooks/brands/useDeleteBrand';
 import type {Brand} from '@/admin/interfaces/brand.interface';
 import {Button} from '@/components/ui/button';
 import {

@@ -1,7 +1,7 @@
 import {Link, Navigate, useNavigate, useParams} from 'react-router';
 import {AdminTitle} from '@/admin/components/AdminTitle';
-import {useCategory} from '@/admin/hooks/useCategory';
-import {useUpdateCategory} from '@/admin/hooks/useUpdateCategory';
+import {useCategory} from '@/admin/hooks/categories/useCategory';
+import {useUpdateCategory} from '@/admin/hooks/categories/useUpdateCategory';
 import type {CategoryInput} from '@/admin/interfaces/category.interface';
 import {buttonVariants} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';
