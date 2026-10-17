@@ -37,6 +37,10 @@ export const HeroSection = () => (
 				src='/samuel-no-background.png'
 				alt='Dueño de la tienda sosteniendo unos tenis'
 				draggable={false}
+				onDragStart={(event) => event.preventDefault()}
+				onMouseDown={(event) => {
+					if (event.button === 0) event.preventDefault();
+				}}
 				className='h-full w-auto max-w-full select-none object-contain object-bottom'
 			/>
 		</div>

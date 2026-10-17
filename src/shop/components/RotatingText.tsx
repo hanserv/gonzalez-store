@@ -57,9 +57,10 @@ export const RotatingText = ({
 	return (
 		<div
 			className={cn(
-				'transition-all ease-out motion-reduce:transition-none',
+				'select-none transition-all ease-out motion-reduce:transition-none',
 				phase === 'out' ? 'opacity-0 blur-md' : 'opacity-100 blur-0',
 			)}
+			onCopy={(event) => event.preventDefault()}
 			// Solo la salida se anima; al entrar, la frase nueva aparece de inmediato
 			style={{transitionDuration: phase === 'out' ? `${EXIT_MS}ms` : '0ms'}}
 		>
