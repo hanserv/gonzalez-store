@@ -1,6 +1,6 @@
 {
 	"$schema": "https://opencode.ai/config.json",
-	"instructions": ["./copilot-instructions.md", "docs/products-spec.md"],
+	"instructions": ["./AGENTS.md", "docs/products-spec.md"],
 	"permission": {
 		"edit": "ask",
 		"bash": "ask"
