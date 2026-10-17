@@ -15,6 +15,8 @@ import {AdminCategoriesPage} from './admin/pages/categories/AdminCategoriesPage'
 import {CreateCategoryPage} from './admin/pages/categories/CreateCategoryPage';
 import {EditCategoryPage} from './admin/pages/categories/EditCategoryPage';
 import {AdminBrandsPage} from './admin/pages/brands/AdminBrandsPage';
+import {CreateBrandPage} from './admin/pages/brands/CreateBrandPage';
+import {EditBrandPage} from './admin/pages/brands/EditBrandPage';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = lazy(() => import('./auth/layouts/AuthLayout'));
@@ -94,6 +96,14 @@ export const appRouter = createBrowserRouter([
 			{
 				path: 'brands',
 				element: <AdminBrandsPage />,
+			},
+			{
+				path: 'brands/:id',
+				element: <EditBrandPage />,
+			},
+			{
+				path: 'brands/new',
+				element: <CreateBrandPage />,
 			},
 		],
 	},

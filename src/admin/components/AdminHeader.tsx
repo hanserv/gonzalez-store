@@ -66,7 +66,7 @@ export const AdminHeader = ({onMenuClick}: AdminHeaderProps) => {
 				<Menu className='size-5' />
 			</Button>
 
-			<CustomLogo subtitle='Administración' url='/admin' />
+			<CustomLogo subtitle='| Administración' url='/admin' />
 
 			{/* Push the user menu to the right of the desktop*/}
 			<div className='ml-auto'>
