@@ -6,7 +6,10 @@ import {ProductPage} from './shop/pages/product/ProductPage';
 import {LoginPage} from './auth/pages/login/LoginPage';
 import {DashboardPage} from './admin/pages/dashboard/DashboardPage';
 import {AdminProductsPage} from './admin/pages/products/AdminProductsPage';
+import {CreateProductPage} from './admin/pages/products/CreateProductPage';
 import {AdminProductPage} from './admin/pages/product/AdminProductPage';
+import {CreateProductVariantPage} from './admin/pages/product/variants/CreateProductVariantPage';
+import {EditProductVariantPage} from './admin/pages/product/variants/EditProductVariantPage';
 import {
 	AuthenticatedRoute,
 	NotAuthenticatedRoute,
@@ -78,8 +81,20 @@ export const appRouter = createBrowserRouter([
 				element: <AdminProductsPage />,
 			},
 			{
+				path: 'products/new',
+				element: <CreateProductPage />,
+			},
+			{
 				path: 'products/:id',
 				element: <AdminProductPage />,
+			},
+			{
+				path: 'products/:productId/variants/new',
+				element: <CreateProductVariantPage />,
+			},
+			{
+				path: 'products/:productId/variants/:variantId',
+				element: <EditProductVariantPage />,
 			},
 			{
 				path: 'categories',
