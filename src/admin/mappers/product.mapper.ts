@@ -36,6 +36,7 @@ export const mapProduct = (row: ProductRow): Product => ({
 	name: row.name,
 	brandId: row.brand_id,
 	categoryId: row.category_id,
+	isPopular: row.is_popular,
 	createdAt: row.created_at,
 });
 
@@ -49,6 +50,7 @@ export const mapProductListItem = (
 		name: row.name,
 		brandId: row.brand_id,
 		categoryId: row.category_id,
+		isPopular: row.is_popular,
 		createdAt: row.created_at,
 		brandName: row.brand?.name ?? 'Sin marca',
 		categoryName: row.category?.name ?? 'Sin categoría',
@@ -71,6 +73,7 @@ export const mapProductDetail = (row: ProductDetailRow): ProductDetail => ({
 	name: row.name,
 	brandId: row.brand_id,
 	categoryId: row.category_id,
+	isPopular: row.is_popular,
 	createdAt: row.created_at,
 	brandName: row.brand?.name ?? 'Sin marca',
 	categoryName: row.category?.name ?? 'Sin categoría',

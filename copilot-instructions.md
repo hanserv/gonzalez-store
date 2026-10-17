@@ -37,12 +37,14 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 ## Reglas estrictas
 
 - Todo el código va en inglés: identificadores, comentarios, logs y mensajes de consola. Solo el texto visible de la UI va en español.
-- No instales la CLI de Supabase como dependencia ni ejecutes `supabase init`. Los tipos se generan solo con `pnpm gen:types`.
+- No instales la CLI de Supabase como dependencia ni ejecutes `supabase init`.
 - Nunca edites `src/supabase/database.types.ts` a mano.
 - Nunca cambies el esquema de la base de datos por tu cuenta. Si una tarea lo requiere, propón el SQL y espera confirmación.
 - Nunca subas `.env`, tokens ni llaves al repositorio.
 - No escribas dobles guiones ni em dashes en textos generados.
 - Haz cambios mínimos y relacionados con la tarea. No reformatees archivos completos ni toques código ajeno a lo pedido.
+- UI: shadcn/ui con Base UI (`@base-ui/react`), NO Radix. No uses `asChild`; usa `render` o `buttonVariants`.
+- No instales ni elimines dependencias sin preguntar.
 
 ## Estilo de código
 
@@ -129,6 +131,7 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 - El stock vive por talla en `variant_sizes` y lo ajusta el admin a mano. Nunca descuentes stock automáticamente.
 - Una variante no se puede activar sin al menos una imagen. El estado activo se cambia solo desde el detalle del producto.
 - Al borrar una variante o una imagen, elimina primero los archivos del bucket y luego las filas. Las bajas normales se hacen con `is_active = false`.
+- `products.is_popular` es un interruptor manual del producto. La tienda lo muestra como una etiqueta "Popular" superpuesta en la card, con `pointer-events-none`.
 - Los archivos se suben con nombre único (uuid) y nunca se sobrescriben.
 
 ## UI y experiencia
@@ -148,7 +151,7 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 
 - Terminado: categories (CRUD completo), login y layout de auth.
 - Brands: CRUD completo, lista en admin, formularios, rutas `/admin/brands` y menú lateral listos.
-- Productos: Etapa 1 (productos), Etapa 2 (variantes con tallas) y Etapa 3 (imágenes) terminadas. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
+- Productos: Etapa 1 (productos), Etapa 2 (variantes con tallas), Etapa 3 (imágenes) y ajuste "producto popular" terminados. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
 - Después: panel rápido de stock (Etapa 4), tienda pública (Etapa 5) y carrito y checkout (Etapa 6).
   Actualiza esta sección al terminar cada etapa.
 

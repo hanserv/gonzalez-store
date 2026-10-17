@@ -7,7 +7,7 @@ export const getProductAction = async (id: string): Promise<ProductDetail> => {
 	const {data, error} = await supabase
 		.from('products')
 		.select(
-			'id,name,brand_id,category_id,created_at,brand:brands(name),category:categories(name),product_variants(id,product_id,name,slug,description,price,discount_percentage,is_active,display_order,created_at,variant_images(id,path,display_order),variant_sizes(id,size,stock))',
+			'id,name,brand_id,category_id,is_popular,created_at,brand:brands(name),category:categories(name),product_variants(id,product_id,name,slug,description,price,discount_percentage,is_active,display_order,created_at,variant_images(id,path,display_order),variant_sizes(id,size,stock))',
 		)
 		.eq('id', id)
 		.single();

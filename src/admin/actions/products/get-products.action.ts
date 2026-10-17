@@ -7,7 +7,7 @@ export const getProductsAction = async (): Promise<ProductListItem[]> => {
 	const {data, error} = await supabase
 		.from('products')
 		.select(
-			'id,name,brand_id,category_id,created_at,brand:brands(name),category:categories(name),product_variants(is_active,display_order,variant_images(path,display_order),variant_sizes(stock))',
+			'id,name,brand_id,category_id,is_popular,created_at,brand:brands(name),category:categories(name),product_variants(is_active,display_order,variant_images(path,display_order),variant_sizes(stock))',
 		)
 		.order('created_at', {ascending: false});
 

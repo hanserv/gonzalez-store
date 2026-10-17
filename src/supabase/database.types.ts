@@ -140,6 +140,7 @@ export type Database = {
 					category_id: string;
 					created_at: string;
 					id: string;
+					is_popular: boolean;
 					name: string;
 				};
 				Insert: {
@@ -147,6 +148,7 @@ export type Database = {
 					category_id: string;
 					created_at?: string;
 					id?: string;
+					is_popular?: boolean;
 					name: string;
 				};
 				Update: {
@@ -154,6 +156,7 @@ export type Database = {
 					category_id?: string;
 					created_at?: string;
 					id?: string;
+					is_popular?: boolean;
 					name?: string;
 				};
 				Relationships: [

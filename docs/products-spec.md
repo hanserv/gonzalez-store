@@ -4,7 +4,7 @@ Fuente de verdad para productos, variantes, imágenes, tallas y stock. Si algo d
 
 ## Conceptos
 
-- **Producto**: el modelo (por ejemplo "Nike Ja Morant 1"). Solo guarda nombre, marca y categoría. No tiene precio, fotos ni color.
+- **Producto**: el modelo (por ejemplo "Nike Ja Morant 1"). Solo guarda nombre, marca, categoría y si es popular. No tiene precio, fotos ni color.
 - **Variante**: la opción que realmente se vende (por ejemplo "Black Gold"). Tiene su propio nombre, slug, descripción, precio, descuento, imágenes y tallas.
 - Un producto con una sola opción tiene una sola variante. No existe un caso especial: todos funcionan igual.
 - El título que ve el cliente se compone con el nombre del producto y el nombre de la variante.
@@ -13,7 +13,7 @@ Fuente de verdad para productos, variantes, imágenes, tallas y stock. Si algo d
 
 El SQL vive en `docs/sql/01-products-schema.sql` y `docs/sql/02-storage-policies.sql`. Resumen:
 
-- `products`: `id`, `name`, `brand_id`, `category_id`, `created_at`. Único por (`brand_id`, `name`) con el constraint `products_brand_id_name_key`. Las FK a marcas y categorías son restrictivas.
+- `products`: `id`, `name`, `brand_id`, `category_id`, `is_popular` (booleano, por defecto falso), `created_at`. Único por (`brand_id`, `name`) con el constraint `products_brand_id_name_key`. Las FK a marcas y categorías son restrictivas.
 - `product_variants`: `id`, `product_id`, `name`, `slug`, `description` (opcional), `price` (numeric, no negativo), `discount_percentage` (0 a 100), `is_active`, `display_order`, `created_at`.
   - Constraints: `product_variants_slug_key` (slug único global) y `product_variants_product_id_name_key` (nombre único dentro del producto).
   - Borrar un producto borra sus variantes (cascada).
@@ -50,10 +50,11 @@ El SQL vive en `docs/sql/01-products-schema.sql` y `docs/sql/02-storage-policies
 - El slug de la variante se propone a partir de "nombre del producto + nombre de la variante", es editable y sigue la regex de brands (minúsculas, números y guiones).
 - Las tallas son texto ("9.5", "M"). El orden de presentación lo resuelve la interfaz con listas predefinidas (numeración para tenis, S a XL para camisetas), no la base de datos.
 - Los precios se muestran en pesos dominicanos (`DOP`) con formato `es-DO`.
+- La etiqueta "Popular" es un interruptor manual del producto (`is_popular`), no se calcula. Conviene usarla en pocos productos para que siga diferenciando.
 
 ## Modelos de la aplicación
 
-- `Product`: `id`, `name`, `brandId`, `categoryId`, `createdAt`.
+- `Product`: `id`, `name`, `brandId`, `categoryId`, `isPopular`, `createdAt`.
 - `ProductListItem` (lista del admin): `Product` más `brandName`, `categoryName`, `variantCount`, `activeVariantCount`, `totalStock` y `coverImageUrl`.
 - `ProductVariant`: `id`, `productId`, `name`, `slug`, `description` (string o null), `price` (number), `discountPercentage`, `isActive`, `displayOrder`, `createdAt`, `images` y `sizes`.
 - `ProductVariantImage`: `id`, `path`, `url` (armada en el mapper), `displayOrder`.
@@ -76,14 +77,15 @@ Rutas bajo `/admin`:
 - `/admin/products/new`: formulario del producto. Al guardar, redirige al detalle.
 - `/admin/products/:productId`: detalle del producto.
 - `/admin/products/:productId/variants/new` y `/admin/products/:productId/variants/:variantId`: formulario de variante.
-  Pantallas:
 
-- **Lista**: miniatura de portada, nombre, marca, categoría, cantidad de variantes y stock total. Filtros por marca, categoría y búsqueda por nombre. Aviso en los productos sin variantes activas.
+Pantallas:
+
+- **Lista**: miniatura de portada, nombre, marca, categoría, cantidad de variantes y stock total. Filtros por marca, categoría y búsqueda por nombre. Aviso en los productos sin variantes activas. Insignia "Popular" junto al nombre cuando aplica.
 - **Detalle del producto**: datos del producto arriba. Debajo, la lista de variantes con miniatura, nombre, precio, descuento, interruptor de activa y resumen de stock. La primera lleva la insignia "Portada". Flechas de subir y bajar cambian el orden. Botón "Agregar variante".
 - **Formulario de variante**: tres tarjetas blancas separadas. Datos de la variante (nombre, slug, descripción, precio y descuento) a la izquierda, imágenes a su derecha y tallas con stock debajo de los datos.
-  - Al crear, se guardan datos y tallas, y se redirige a la edición de la misma variante, donde se habilita la galería (porque la ruta del archivo lleva el id de la variante).
-  - El estado activo no se edita aquí: se cambia con el interruptor del detalle del producto.
-  - En la galería: se suben imágenes arrastrando y soltando (o con el selector de archivos), se reordenan con flechas izquierda y derecha y se borran con confirmación. La primera imagen es la principal.
+- Al crear, se guardan datos y tallas, y se redirige a la edición de la misma variante, donde se habilita la galería (porque la ruta del archivo lleva el id de la variante).
+- El estado activo no se edita aquí: se cambia con el interruptor del detalle del producto.
+- En la galería: se suben imágenes arrastrando y soltando (o con el selector de archivos), se reordenan con flechas izquierda y derecha y se borran con confirmación. La primera imagen es la principal.
 - **Panel rápido de stock**: en el detalle del producto, cada variante se expande y muestra sus tallas con un campo numérico que se guarda al salir del campo. Es la operación más frecuente, debe ser de dos clics.
 
 ## Tienda
@@ -102,6 +104,7 @@ Cada etapa lleva datos, hooks y pantallas, y debe poder probarse al terminar. Im
 - [x] Etapa 1, productos (el modelo): interface, mapper, schema, error, actions, hooks, lista, formulario, rutas e ítem del menú. La lista ya trae marca, categoría y variantes en una sola consulta.
 - [x] Etapa 2, variantes con tallas: detalle del producto con lista de variantes y formulario de variante (datos y tallas).
 - [x] Etapa 3, imágenes: galería de la variante con subida, orden y borrado, compresión en el cliente y limpieza del bucket.
+- [x] Ajuste, producto popular: columna `is_popular` en `01-products-schema.sql`, interface, mapper, interruptor en la lista e insignia en la lista del admin. La etiqueta de la tienda se hace en la etapa 5.
 - [ ] Etapa 4, panel rápido de stock.
 - [ ] Etapa 5, tienda: card del catálogo y página de variante con carrusel.
 - [ ] Etapa 6, carrito y checkout (decisión pendiente: pedido por WhatsApp o tablas de pedidos).
