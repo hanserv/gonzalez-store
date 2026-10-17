@@ -39,7 +39,7 @@ export const DeleteProductDialog = ({
 					<AlertDialogTitle>¿Eliminar producto?</AlertDialogTitle>
 					<AlertDialogDescription>
 						Vas a eliminar <strong>{product?.name}</strong>. Esta acción no se
-						puede deshacer. Si tiene variantes asociadas, también se eliminarán.
+						puede deshacer.
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
