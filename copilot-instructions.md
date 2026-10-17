@@ -2,12 +2,17 @@
 
 Este repositorio es una app web en React + TypeScript + Vite para una tienda de tenis y ropa (Gonzalez Peña), con tres zonas: shop, auth y admin. Antes de proponer cambios, respeta el patrón existente y no introduzcas arquitecturas nuevas.
 
+## Documentos de referencia
+
+- Antes de trabajar en productos, variantes, imágenes, tallas o stock, lee `docs/products-spec.md`. Es la fuente de verdad de ese módulo: modelo de datos, reglas de negocio, pantallas del admin, comportamiento de la tienda y plan por etapas.
+- Si una tarea contradice ese documento, detente y avisa en vez de improvisar. Si cambias algo del módulo, actualiza el documento en el mismo cambio.
+
 ## Stack
 
 - React 19, TypeScript y Vite.
 - React Router para navegación.
 - TanStack React Query para datos remotos, caché e invalidaciones.
-- Supabase para autenticación y persistencia, con tipos generados.
+- Supabase para autenticación, base de datos y Storage, con tipos generados.
 - React Hook Form + Zod para formularios y validación.
 - Zustand para estado global ligero (sesión de auth).
 - Tailwind CSS v4, shadcn/ui (componentes base en `src/components/ui`) e iconos de `lucide-react`.
@@ -26,6 +31,7 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 - Todo el código va en inglés: identificadores, comentarios, logs y mensajes de consola. Solo el texto visible de la UI va en español.
 - No instales la CLI de Supabase como dependencia ni ejecutes `supabase init`. Los tipos se generan solo con `pnpm gen:types`.
 - Nunca edites `src/supabase/database.types.ts` a mano.
+- Nunca cambies el esquema de la base de datos por tu cuenta. Si una tarea lo requiere, propón el SQL y espera confirmación.
 - Nunca subas `.env`, tokens ni llaves al repositorio.
 - No escribas dobles guiones ni em dashes en textos generados.
 - Haz cambios mínimos y relacionados con la tarea. No reformatees archivos completos ni toques código ajeno a lo pedido.
@@ -47,10 +53,11 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 - `src/components/ui`: primitivas reutilizables de interfaz.
 - `src/lib`: utilidades compartidas (`query-client`, helpers).
 - `src/supabase`: cliente y tipos generados de la base de datos.
+- `docs`: especificaciones del proyecto.
 
 ## Entidad de referencia
 
-`categories` es la implementación de referencia. Toda entidad nueva (brands, products, etc.) se replica archivo por archivo desde categories, con los mismos nombres, capas y convenciones. Ante cualquier duda, abre los archivos de categories y copia el patrón.
+`categories` es la implementación de referencia y `brands` la replica sin diferencias. Toda entidad nueva se replica archivo por archivo desde ellas, con los mismos nombres, capas y convenciones. Ante cualquier duda, abre los archivos de categories y brands y copia el patrón.
 
 ## Patrón de implementación
 
@@ -58,18 +65,17 @@ Cuando trabajes con datos de Supabase sigue siempre esta cadena. Cada entidad `X
 
 1. Interface (`interfaces/x.interface.ts`):
    - `XRow = Tables<'x'>`, la fila tal como viene de Supabase.
-   - `X`, el modelo de la app en camelCase (`createdAt` como string ISO 8601, `description: string | null`).
-   - `XInput`, el payload de crear y editar (`name`, `slug` y `description` como `string`).
+   - `X`, el modelo de la app en camelCase (`createdAt` como string ISO 8601).
+   - `XInput`, el payload de crear y editar.
 2. Mapper (`mappers/x.mapper.ts`):
    - `mapX(row)` convierte `snake_case` a `camelCase`.
-   - `prepareXForSave(input)` hace trim del nombre, slug en minúsculas con trim, y descripción vacía a `null`.
+   - `prepareXForSave(input)` hace trim del texto, slug en minúsculas, y descripción vacía a `null`.
 3. Schema (`schemas/x.schema.ts`):
    - Esquema de Zod SIN anotación `z.ZodType<XInput>`.
    - Exporta `XFormValues = z.infer<typeof xSchema>`.
    - Mensajes de validación en español, con `trim`, límites de longitud y regex para el slug.
 4. Error (`errors/x.error.ts`):
-   - Unión `XErrorCode`: `duplicate_name`, `duplicate_slug`, `in_use`, `not_found`.
-   - Clase `XError` con `code`, el diccionario `X_ERROR_MESSAGES` en español y la función `toXError`.
+   - Unión `XErrorCode`, clase `XError` con `code`, diccionario `X_ERROR_MESSAGES` en español y función `toXError`.
    - `toXError` traduce `23505` (por nombre de constraint), `23503` (en uso) y `PGRST116` (no encontrado). Si no reconoce el error, devuelve el original sin tocarlo.
 5. Actions (`actions/`):
    - `getXsAction`, `getXByIdAction`, `createXAction`, `updateXAction`, `deleteXAction`.
@@ -84,6 +90,7 @@ Cuando trabajes con datos de Supabase sigue siempre esta cadena. Cada entidad `X
 - Usa `react-hook-form` con `zodResolver` y el esquema de `schemas/`.
 - Tipa con `useForm<XFormValues>`. `defaultValues` con strings vacíos.
 - `onSubmit(values: XFormValues)` pasa los values directo a la mutación. No conviertas `''` a `null` en el formulario, eso ya lo hace `prepareXForSave`.
+- Si un esquema usa `z.coerce` o transformaciones, el tipo de entrada y el de salida difieren: usa los tres genéricos de `useForm` (entrada, contexto, salida).
 - Si un campo es opcional en la UI, refléjalo en el esquema, en el input y en el modelo.
 - Para mostrar errores de negocio usa `X_ERROR_MESSAGES[error.code]` cuando el error sea `XError`.
 
@@ -99,9 +106,22 @@ Cuando trabajes con datos de Supabase sigue siempre esta cadena. Cada entidad `X
 - Usa el cliente de `src/supabase/supabase`.
 - No expongas rows crudas de Supabase en la UI cuando exista un modelo de dominio.
 - Traduce los errores de Postgres a errores de negocio legibles.
-- RLS activo en todas las tablas. Patrón: SELECT para `anon` y `authenticated`; INSERT, UPDATE y DELETE solo para `authenticated`.
-- Los constraints únicos se llaman `<tabla>_slug_key` y `<tabla>_name_key`. `toXError` depende de esos nombres exactos, así que al crear una tabla nueva respétalos.
-- Tablas actuales: `brands` y `categories` (id, name, slug, description, created_at), `products` (con FK a brands y categories) y `product_images`.
+- RLS activo en todas las tablas. Patrón base: SELECT público, INSERT, UPDATE y DELETE solo para `authenticated`. Las tablas del módulo de productos tienen una variante: el anónimo solo ve lo activo (detalle en `docs/products-spec.md`).
+- Los constraints únicos se llaman `<tabla>_<columnas>_key` (por ejemplo `brands_slug_key`). `toXError` depende de esos nombres exactos, así que al crear una tabla nueva respétalos.
+- Tablas actuales: `brands`, `categories`, `products` (el modelo), `product_variants`, `variant_images` y `variant_sizes`.
+- Storage: bucket público `product-images`. Las imágenes se guardan en la base de datos como `path` (por ejemplo `variants/{variant_id}/{archivo}`), nunca como URL. La URL pública se arma en el mapper con `supabase.storage.from('product-images').getPublicUrl(path)`.
+
+## Reglas del módulo de productos (resumen)
+
+El detalle completo está en `docs/products-spec.md`. Lo esencial:
+
+- Un producto es el modelo (nombre, marca, categoría). Lo que se vende son sus variantes, cada una con su precio, descripción, imágenes y tallas.
+- El título que ve el cliente se compone con el nombre del producto y el nombre de la variante. La URL pertenece a la variante (su slug).
+- La variante de portada es la activa con menor `display_order`.
+- El stock vive por talla en `variant_sizes` y lo ajusta el admin a mano. Nunca descuentes stock automáticamente.
+- Una variante no se puede activar sin al menos una imagen.
+- Al borrar una variante o una imagen, elimina primero los archivos del bucket y luego las filas. Las bajas normales se hacen con `is_active = false`.
+- Los archivos se suben con nombre único (uuid) y nunca se sobrescriben.
 
 ## UI y experiencia
 
@@ -119,12 +139,19 @@ Cuando trabajes con datos de Supabase sigue siempre esta cadena. Cada entidad `X
 ## Estado actual
 
 - Terminado: categories (CRUD completo), login y layout de auth.
-- Brands: interface, mapper, schema, error y actions listos. Pendiente: hooks, página de lista, página de formulario, rutas `/admin/brands`, ítem del menú lateral (ícono `Crown`), policies RLS y constraints únicos en Supabase.
-- Siguiente: products (selects de marca y categoría, imágenes).
-  Actualiza esta sección al terminar cada bloque de trabajo.
+- Brands: CRUD completo, lista en admin, formularios, rutas `/admin/brands` y menú lateral listos.
+- En progreso: módulo de productos con variantes, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
+- Después: tienda pública (catálogo y página de variante), carrito y checkout.
+  Actualiza esta sección al terminar cada etapa.
+
+## Deuda técnica (refactor final)
+
+- Crear una variante con sus tallas debería ser todo o nada. Hoy son dos peticiones separadas; se resolverá con una función en la base de datos.
+- Si falla el guardado después de subir imágenes, pueden quedar archivos huérfanos en el bucket.
+- El orden de variantes e imágenes se cambia con flechas; se puede mejorar con arrastrar y soltar.
 
 ## Cuando dudes
 
-- Revisa los archivos de categories antes de inventar una convención nueva.
+- Revisa los archivos de categories y brands antes de inventar una convención nueva.
 - Prioriza la consistencia con el patrón actual sobre una solución genérica.
 - Si una decisión afecta datos, validación o caché, alinea action, mapper, schema y hook juntos.

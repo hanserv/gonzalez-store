@@ -87,31 +87,46 @@ export type Database = {
 				};
 				Relationships: [];
 			};
-			product_images: {
+			product_variants: {
 				Row: {
 					created_at: string;
+					description: string | null;
+					discount_percentage: number;
 					display_order: number;
 					id: string;
+					is_active: boolean;
+					name: string;
+					price: number;
 					product_id: string;
-					url: string;
+					slug: string;
 				};
 				Insert: {
 					created_at?: string;
-					display_order: number;
+					description?: string | null;
+					discount_percentage?: number;
+					display_order?: number;
 					id?: string;
+					is_active?: boolean;
+					name: string;
+					price: number;
 					product_id: string;
-					url: string;
+					slug: string;
 				};
 				Update: {
 					created_at?: string;
+					description?: string | null;
+					discount_percentage?: number;
 					display_order?: number;
 					id?: string;
+					is_active?: boolean;
+					name?: string;
+					price?: number;
 					product_id?: string;
-					url?: string;
+					slug?: string;
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'product_images_product_id_fkey';
+						foreignKeyName: 'product_variants_product_id_fkey';
 						columns: ['product_id'];
 						isOneToOne: false;
 						referencedRelation: 'products';
@@ -124,43 +139,22 @@ export type Database = {
 					brand_id: string;
 					category_id: string;
 					created_at: string;
-					description: string | null;
-					discount_percentage: number;
 					id: string;
-					is_active: boolean;
 					name: string;
-					price: number;
-					sizes: string[];
-					slug: string;
-					stock: number;
 				};
 				Insert: {
 					brand_id: string;
 					category_id: string;
 					created_at?: string;
-					description?: string | null;
-					discount_percentage?: number;
 					id?: string;
-					is_active?: boolean;
 					name: string;
-					price: number;
-					sizes?: string[];
-					slug: string;
-					stock: number;
 				};
 				Update: {
 					brand_id?: string;
 					category_id?: string;
 					created_at?: string;
-					description?: string | null;
-					discount_percentage?: number;
 					id?: string;
-					is_active?: boolean;
 					name?: string;
-					price?: number;
-					sizes?: string[];
-					slug?: string;
-					stock?: number;
 				};
 				Relationships: [
 					{
@@ -175,6 +169,70 @@ export type Database = {
 						columns: ['category_id'];
 						isOneToOne: false;
 						referencedRelation: 'categories';
+						referencedColumns: ['id'];
+					},
+				];
+			};
+			variant_images: {
+				Row: {
+					created_at: string;
+					display_order: number;
+					id: string;
+					path: string;
+					variant_id: string;
+				};
+				Insert: {
+					created_at?: string;
+					display_order?: number;
+					id?: string;
+					path: string;
+					variant_id: string;
+				};
+				Update: {
+					created_at?: string;
+					display_order?: number;
+					id?: string;
+					path?: string;
+					variant_id?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'variant_images_variant_id_fkey';
+						columns: ['variant_id'];
+						isOneToOne: false;
+						referencedRelation: 'product_variants';
+						referencedColumns: ['id'];
+					},
+				];
+			};
+			variant_sizes: {
+				Row: {
+					created_at: string;
+					id: string;
+					size: string;
+					stock: number;
+					variant_id: string;
+				};
+				Insert: {
+					created_at?: string;
+					id?: string;
+					size: string;
+					stock?: number;
+					variant_id: string;
+				};
+				Update: {
+					created_at?: string;
+					id?: string;
+					size?: string;
+					stock?: number;
+					variant_id?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'variant_sizes_variant_id_fkey';
+						columns: ['variant_id'];
+						isOneToOne: false;
+						referencedRelation: 'product_variants';
 						referencedColumns: ['id'];
 					},
 				];
