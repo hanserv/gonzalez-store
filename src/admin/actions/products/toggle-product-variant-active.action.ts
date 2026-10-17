@@ -13,6 +13,17 @@ export const toggleProductVariantActiveAction = async ({
 	id,
 	isActive,
 }: ToggleProductVariantActiveParams): Promise<void> => {
+	if (isActive) {
+		const {count, error: imageCountError} = await supabase
+			.from('variant_images')
+			.select('id', {count: 'exact', head: true})
+			.eq('variant_id', id);
+
+		if (imageCountError) throw toProductVariantError(imageCountError);
+
+		if (!count) throw new ProductVariantError('image_required');
+	}
+
 	const {data, error} = await supabase
 		.from('product_variants')
 		.update({is_active: isActive})

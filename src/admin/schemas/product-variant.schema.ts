@@ -37,7 +37,6 @@ export const productVariantSchema = z.object({
 		.number()
 		.min(0, 'El descuento no puede ser negativo')
 		.max(100, 'El descuento no puede superar 100'),
-	isActive: z.boolean(),
 	sizes: z
 		.array(productVariantSizeSchema)
 		.min(1, 'Debes agregar al menos una talla'),

@@ -3,6 +3,7 @@ import type {PostgrestError} from '@supabase/supabase-js';
 export type ProductVariantErrorCode =
 	| 'duplicate_name'
 	| 'duplicate_slug'
+	| 'image_required'
 	| 'not_found';
 
 export class ProductVariantError extends Error {
@@ -21,6 +22,7 @@ export const PRODUCT_VARIANT_ERROR_MESSAGES: Record<
 > = {
 	duplicate_name: 'Ya existe una variante con ese nombre en este producto.',
 	duplicate_slug: 'Ya existe una variante con ese slug.',
+	image_required: 'No puedes activar una variante sin al menos una imagen.',
 	not_found: 'La variante no existe o no tienes permiso.',
 };
 

@@ -11,7 +11,6 @@ const emptyValues: ProductVariantFormValues = {
 	description: '',
 	price: 0,
 	discountPercentage: 0,
-	isActive: true,
 	sizes: [{size: '', stock: 0}],
 };
 
@@ -36,7 +35,7 @@ const CreateProductVariantContent = ({
 
 	const handleSubmit = (values: ProductVariantFormValues) => {
 		mutate(
-			{productId, ...values},
+			{productId, ...values, isActive: false},
 			{
 				onSuccess: (variant) =>
 					navigate(`/admin/products/${productId}/variants/${variant.id}`),
@@ -46,7 +45,7 @@ const CreateProductVariantContent = ({
 
 	return (
 		<>
-			<div className='mb-5 mx-auto max-w-3xl'>
+			<div className='mb-5 mx-auto max-w-5xl'>
 				<AdminTitle
 					title='Nueva variante'
 					subtitle={

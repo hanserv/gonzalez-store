@@ -7,19 +7,25 @@ import type {
 	ProductVariantSize,
 } from '@/admin/interfaces/product-variant.interface';
 
-const PRODUCT_IMAGES_BUCKET = 'product-images';
+export const PRODUCT_IMAGES_BUCKET = 'product-images';
 
-const mapVariantImage = ({
+interface VariantImageRowShape {
+	id: string;
+	path: string;
+	display_order: number;
+}
+
+export const buildVariantImageUrl = (path: string) =>
+	supabase.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(path).data.publicUrl;
+
+export const mapVariantImage = ({
 	id,
 	path,
 	display_order,
-}: NonNullable<
-	ProductVariantDetailRow['variant_images']
->[number]): ProductVariantImage => ({
+}: VariantImageRowShape): ProductVariantImage => ({
 	id,
 	path,
-	url: supabase.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(path).data
-		.publicUrl,
+	url: buildVariantImageUrl(path),
 	displayOrder: display_order,
 });
 

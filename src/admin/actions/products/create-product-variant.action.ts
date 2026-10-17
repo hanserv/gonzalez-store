@@ -27,7 +27,9 @@ export const createProductVariantAction = async (
 
 	const {data, error} = await supabase
 		.from('product_variants')
-		.insert(prepareProductVariantForSave({...input, displayOrder}))
+		.insert(
+			prepareProductVariantForSave({...input, displayOrder, isActive: false}),
+		)
 		.select(
 			'id,product_id,name,slug,description,price,discount_percentage,is_active,display_order,created_at,variant_images(id,path,display_order),variant_sizes(id,size,stock)',
 		)

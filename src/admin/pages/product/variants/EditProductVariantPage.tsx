@@ -38,12 +38,18 @@ const EditProductVariantContent = ({
 	const {mutate, isPending} = useUpdateProductVariant();
 
 	const handleSubmit = (values: ProductVariantFormValues) => {
-		mutate({id: variantId, input: {productId, ...values}}, {onSuccess: onDone});
+		mutate(
+			{
+				id: variantId,
+				input: {productId, ...values, isActive: variant?.isActive ?? false},
+			},
+			{onSuccess: onDone},
+		);
 	};
 
 	return (
 		<>
-			<div className='mb-5 mx-auto max-w-3xl'>
+			<div className='mb-5 mx-auto max-w-5xl'>
 				<AdminTitle
 					title='Editar variante'
 					subtitle={
@@ -55,13 +61,13 @@ const EditProductVariantContent = ({
 			</div>
 
 			{isLoading && (
-				<div className='mx-auto flex max-w-3xl flex-col gap-5 rounded-xl border border-gray-200 bg-white p-6'>
+				<div className='mx-auto flex max-w-5xl flex-col gap-5 rounded-xl border border-gray-200 bg-white p-6'>
 					<p className='text-sm text-muted-foreground'>Cargando variante...</p>
 				</div>
 			)}
 
 			{isError && (
-				<div className='mx-auto flex max-w-3xl flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white p-10 text-center'>
+				<div className='mx-auto flex max-w-5xl flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white p-10 text-center'>
 					<p className='text-sm text-muted-foreground'>
 						No se encontró la variante.
 					</p>
@@ -76,7 +82,6 @@ const EditProductVariantContent = ({
 						description: variant.description ?? '',
 						price: variant.price,
 						discountPercentage: variant.discountPercentage,
-						isActive: variant.isActive,
 						sizes:
 							variant.sizes.length > 0 ? variant.sizes : [{size: '', stock: 0}],
 					}}
@@ -84,6 +89,9 @@ const EditProductVariantContent = ({
 					submitLabel='Guardar cambios'
 					onSubmit={handleSubmit}
 					onCancelUrl={`/admin/products/${productId}`}
+					variantId={variantId}
+					images={variant.images}
+					isActive={variant.isActive}
 				/>
 			)}
 		</>
