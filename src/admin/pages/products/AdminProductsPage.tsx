@@ -5,6 +5,7 @@ import {AdminTitle} from '@/admin/components/AdminTitle';
 import {useBrands} from '@/admin/hooks/brands/useBrands';
 import {useCategories} from '@/admin/hooks/categories/useCategories';
 import {useProducts} from '@/admin/hooks/products/useProducts';
+import {useToggleProductPopular} from '@/admin/hooks/products/useToggleProductPopular';
 import type {ProductListItem} from '@/admin/interfaces/product.interface';
 import {Button, buttonVariants} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';
@@ -21,12 +22,13 @@ import {ProductFilters} from './ui/ProductFilters';
 import {ProductRow} from './ui/ProductRow';
 
 const SKELETON_ROWS = 4;
-const COLUMNS = 8;
+const COLUMNS = 9;
 
 export const AdminProductsPage = () => {
 	const {data: products, isLoading, isError, refetch} = useProducts();
 	const {data: brands = []} = useBrands();
 	const {data: categories = []} = useCategories();
+	const {mutate: togglePopular} = useToggleProductPopular();
 	const [search, setSearch] = useState('');
 	const [brandId, setBrandId] = useState('');
 	const [categoryId, setCategoryId] = useState('');
@@ -83,6 +85,7 @@ export const AdminProductsPage = () => {
 						<TableHead>Activas</TableHead>
 						<TableHead>Stock total</TableHead>
 						<TableHead>Fecha</TableHead>
+						<TableHead>Popular</TableHead>
 						<TableHead className='text-right'>Acciones</TableHead>
 					</TableRow>
 				</TableHeader>
@@ -127,6 +130,9 @@ export const AdminProductsPage = () => {
 						<ProductRow
 							key={product.id}
 							product={product}
+							onTogglePopular={(isPopular) =>
+								togglePopular({id: product.id, isPopular})
+							}
 							onDeleteClick={setProductToDelete}
 						/>
 					))}

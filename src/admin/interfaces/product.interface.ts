@@ -11,6 +11,7 @@ export interface Product {
 	name: string;
 	brandId: string;
 	categoryId: string;
+	isPopular: boolean;
 	createdAt: string;
 }
 
@@ -34,6 +35,7 @@ export interface ProductListItemRow {
 	name: string;
 	brand_id: string;
 	category_id: string;
+	is_popular: boolean;
 	created_at: string;
 	brand: {name: string} | null;
 	category: {name: string} | null;
@@ -50,6 +52,7 @@ export interface ProductDetail {
 	name: string;
 	brandId: string;
 	categoryId: string;
+	isPopular: boolean;
 	brandName: string;
 	categoryName: string;
 	createdAt: string;
@@ -61,6 +64,7 @@ export interface ProductDetailRow {
 	name: string;
 	brand_id: string;
 	category_id: string;
+	is_popular: boolean;
 	created_at: string;
 	brand: {name: string} | null;
 	category: {name: string} | null;
