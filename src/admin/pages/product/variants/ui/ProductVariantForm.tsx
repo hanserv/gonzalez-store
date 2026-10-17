@@ -1,4 +1,5 @@
-import {useForm} from 'react-hook-form';
+import {useEffect, useState} from 'react';
+import {useForm, useWatch} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Link} from 'react-router';
 import {Loader2, X} from 'lucide-react';
@@ -7,8 +8,19 @@ import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
 import {Textarea} from '@/components/ui/textarea';
 import {productVariantSchema} from '@/admin/schemas/product-variant.schema';
-import type {ProductVariantFormValues} from '@/admin/schemas/product-variant.schema';
+import type {
+	ProductVariantFormInput,
+	ProductVariantFormValues,
+} from '@/admin/schemas/product-variant.schema';
 import {VariantSizesFieldArray} from './VariantSizesFieldArray';
+
+const slugify = (value: string) =>
+	value
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '');
 
 interface ProductVariantFormProps {
 	defaultValues: ProductVariantFormValues;
@@ -16,6 +28,8 @@ interface ProductVariantFormProps {
 	submitLabel: string;
 	onSubmit: (values: ProductVariantFormValues) => void;
 	onCancelUrl: string;
+	productName?: string;
+	proposeSlug?: boolean;
 }
 
 export const ProductVariantForm = ({
@@ -24,16 +38,33 @@ export const ProductVariantForm = ({
 	submitLabel,
 	onSubmit,
 	onCancelUrl,
+	productName,
+	proposeSlug = false,
 }: ProductVariantFormProps) => {
 	const {
 		register,
 		handleSubmit,
 		control,
+		setValue,
 		formState: {errors},
-	} = useForm<ProductVariantFormValues>({
+	} = useForm<ProductVariantFormInput, unknown, ProductVariantFormValues>({
 		resolver: zodResolver(productVariantSchema),
 		defaultValues,
 	});
+
+	const nameValue = useWatch({control, name: 'name'});
+	const isActiveValue = useWatch({control, name: 'isActive'});
+	const sizesValue = useWatch({control, name: 'sizes'});
+	const [slugEdited, setSlugEdited] = useState(false);
+
+	useEffect(() => {
+		if (!proposeSlug || slugEdited) return;
+
+		setValue('slug', slugify(`${productName ?? ''} ${nameValue ?? ''}`));
+	}, [nameValue, productName, proposeSlug, setValue, slugEdited]);
+
+	const hasStock = (sizesValue ?? []).some((size) => Number(size.stock) > 0);
+	const showStockWarning = isActiveValue && !hasStock;
 
 	return (
 		<form
@@ -64,7 +95,11 @@ export const ProductVariantForm = ({
 						id='slug'
 						placeholder='black-gold'
 						aria-invalid={!!errors.slug}
-						{...register('slug')}
+						{...register('slug', {
+							onChange: () => {
+								setSlugEdited(true);
+							},
+						})}
 					/>
 					{errors.slug && (
 						<p className='text-sm text-destructive'>{errors.slug.message}</p>
@@ -86,7 +121,7 @@ export const ProductVariantForm = ({
 					)}
 				</div>
 
-				<div className='grid gap-3 sm:grid-cols-3'>
+				<div className='grid gap-3 sm:grid-cols-2'>
 					<div className='grid gap-2'>
 						<Label htmlFor='price'>Precio</Label>
 						<Input
@@ -118,22 +153,6 @@ export const ProductVariantForm = ({
 							</p>
 						)}
 					</div>
-
-					<div className='grid gap-2'>
-						<Label htmlFor='displayOrder'>Orden</Label>
-						<Input
-							id='displayOrder'
-							type='number'
-							min='0'
-							aria-invalid={!!errors.displayOrder}
-							{...register('displayOrder', {valueAsNumber: true})}
-						/>
-						{errors.displayOrder && (
-							<p className='text-sm text-destructive'>
-								{errors.displayOrder.message}
-							</p>
-						)}
-					</div>
 				</div>
 
 				<div className='flex items-center gap-2'>
@@ -157,6 +176,12 @@ export const ProductVariantForm = ({
 					errors={errors}
 				/>
 			</section>
+
+			{showStockWarning && (
+				<p className='rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-700'>
+					Esta variante está activa pero ninguna talla tiene stock.
+				</p>
+			)}
 
 			<div className='flex justify-end gap-2'>
 				<Link to={onCancelUrl} className={buttonVariants({variant: 'outline'})}>
