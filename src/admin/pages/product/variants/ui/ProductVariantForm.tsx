@@ -12,7 +12,9 @@ import type {
 	ProductVariantFormInput,
 	ProductVariantFormValues,
 } from '@/admin/schemas/product-variant.schema';
+import type {ProductVariantImage} from '@/admin/interfaces/product-variant.interface';
 import {VariantSizesFieldArray} from './VariantSizesFieldArray';
+import {VariantImagesGallery} from './VariantImagesGallery';
 
 const slugify = (value: string) =>
 	value
@@ -22,6 +24,9 @@ const slugify = (value: string) =>
 		.replace(/[^a-z0-9]+/g, '-')
 		.replace(/^-+|-+$/g, '');
 
+const sectionClassName =
+	'grid gap-4 rounded-xl border border-gray-200 bg-white p-6';
+
 interface ProductVariantFormProps {
 	defaultValues: ProductVariantFormValues;
 	isPending: boolean;
@@ -30,6 +35,9 @@ interface ProductVariantFormProps {
 	onCancelUrl: string;
 	productName?: string;
 	proposeSlug?: boolean;
+	variantId?: string;
+	images?: ProductVariantImage[];
+	isActive?: boolean;
 }
 
 export const ProductVariantForm = ({
@@ -40,6 +48,9 @@ export const ProductVariantForm = ({
 	onCancelUrl,
 	productName,
 	proposeSlug = false,
+	variantId,
+	images = [],
+	isActive = false,
 }: ProductVariantFormProps) => {
 	const {
 		register,
@@ -53,7 +64,6 @@ export const ProductVariantForm = ({
 	});
 
 	const nameValue = useWatch({control, name: 'name'});
-	const isActiveValue = useWatch({control, name: 'isActive'});
 	const sizesValue = useWatch({control, name: 'sizes'});
 	const [slugEdited, setSlugEdited] = useState(false);
 
@@ -64,118 +74,125 @@ export const ProductVariantForm = ({
 	}, [nameValue, productName, proposeSlug, setValue, slugEdited]);
 
 	const hasStock = (sizesValue ?? []).some((size) => Number(size.stock) > 0);
-	const showStockWarning = isActiveValue && !hasStock;
+	const showStockWarning = isActive && !hasStock;
 
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
-			className='mx-auto flex max-w-3xl flex-col gap-6 rounded-xl border border-gray-200 bg-white p-6'
+			className='mx-auto flex max-w-5xl flex-col gap-6'
 		>
-			<section className='grid gap-4'>
-				<div className='flex items-center justify-between'>
-					<h2 className='text-xl font-semibold'>Datos de la variante</h2>
+			<div className='grid items-start gap-6 lg:grid-cols-5'>
+				<div className='flex flex-col gap-6 lg:col-span-3'>
+					<section className={sectionClassName}>
+						<h2 className='text-xl font-semibold'>Datos de la variante</h2>
+
+						<div className='grid gap-2'>
+							<Label htmlFor='name'>Nombre</Label>
+							<Input
+								id='name'
+								placeholder='Black Gold'
+								aria-invalid={!!errors.name}
+								{...register('name')}
+							/>
+							{errors.name && (
+								<p className='text-sm text-destructive'>
+									{errors.name.message}
+								</p>
+							)}
+						</div>
+
+						<div className='grid gap-2'>
+							<Label htmlFor='slug'>Slug</Label>
+							<Input
+								id='slug'
+								placeholder='black-gold'
+								aria-invalid={!!errors.slug}
+								{...register('slug', {
+									onChange: () => {
+										setSlugEdited(true);
+									},
+								})}
+							/>
+							{errors.slug && (
+								<p className='text-sm text-destructive'>
+									{errors.slug.message}
+								</p>
+							)}
+						</div>
+
+						<div className='grid gap-2'>
+							<Label htmlFor='description'>Descripción (opcional)</Label>
+							<Textarea
+								id='description'
+								rows={4}
+								aria-invalid={!!errors.description}
+								{...register('description')}
+							/>
+							{errors.description && (
+								<p className='text-sm text-destructive'>
+									{errors.description.message}
+								</p>
+							)}
+						</div>
+
+						<div className='grid gap-3 sm:grid-cols-2'>
+							<div className='grid gap-2'>
+								<Label htmlFor='price'>Precio</Label>
+								<Input
+									id='price'
+									type='number'
+									min='0'
+									step='0.01'
+									aria-invalid={!!errors.price}
+									{...register('price', {valueAsNumber: true})}
+								/>
+								{errors.price && (
+									<p className='text-sm text-destructive'>
+										{errors.price.message}
+									</p>
+								)}
+							</div>
+
+							<div className='grid gap-2'>
+								<Label htmlFor='discountPercentage'>Descuento (%)</Label>
+								<Input
+									id='discountPercentage'
+									type='number'
+									min='0'
+									max='100'
+									aria-invalid={!!errors.discountPercentage}
+									{...register('discountPercentage', {valueAsNumber: true})}
+								/>
+								{errors.discountPercentage && (
+									<p className='text-sm text-destructive'>
+										{errors.discountPercentage.message}
+									</p>
+								)}
+							</div>
+						</div>
+					</section>
+
+					<section className={sectionClassName}>
+						<h2 className='text-xl font-semibold'>Tallas con stock</h2>
+						<VariantSizesFieldArray
+							control={control}
+							register={register}
+							errors={errors}
+						/>
+					</section>
 				</div>
 
-				<div className='grid gap-2'>
-					<Label htmlFor='name'>Nombre</Label>
-					<Input
-						id='name'
-						placeholder='Black Gold'
-						aria-invalid={!!errors.name}
-						{...register('name')}
-					/>
-					{errors.name && (
-						<p className='text-sm text-destructive'>{errors.name.message}</p>
-					)}
-				</div>
-
-				<div className='grid gap-2'>
-					<Label htmlFor='slug'>Slug</Label>
-					<Input
-						id='slug'
-						placeholder='black-gold'
-						aria-invalid={!!errors.slug}
-						{...register('slug', {
-							onChange: () => {
-								setSlugEdited(true);
-							},
-						})}
-					/>
-					{errors.slug && (
-						<p className='text-sm text-destructive'>{errors.slug.message}</p>
-					)}
-				</div>
-
-				<div className='grid gap-2'>
-					<Label htmlFor='description'>Descripción (opcional)</Label>
-					<Textarea
-						id='description'
-						rows={4}
-						aria-invalid={!!errors.description}
-						{...register('description')}
-					/>
-					{errors.description && (
-						<p className='text-sm text-destructive'>
-							{errors.description.message}
+				<section className={`${sectionClassName} lg:col-span-2`}>
+					<h2 className='text-xl font-semibold'>Imágenes</h2>
+					{variantId ? (
+						<VariantImagesGallery variantId={variantId} images={images} />
+					) : (
+						<p className='rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground'>
+							Guarda la variante para poder agregar imágenes.
 						</p>
 					)}
-				</div>
-
-				<div className='grid gap-3 sm:grid-cols-2'>
-					<div className='grid gap-2'>
-						<Label htmlFor='price'>Precio</Label>
-						<Input
-							id='price'
-							type='number'
-							min='0'
-							step='0.01'
-							aria-invalid={!!errors.price}
-							{...register('price', {valueAsNumber: true})}
-						/>
-						{errors.price && (
-							<p className='text-sm text-destructive'>{errors.price.message}</p>
-						)}
-					</div>
-
-					<div className='grid gap-2'>
-						<Label htmlFor='discountPercentage'>Descuento (%)</Label>
-						<Input
-							id='discountPercentage'
-							type='number'
-							min='0'
-							max='100'
-							aria-invalid={!!errors.discountPercentage}
-							{...register('discountPercentage', {valueAsNumber: true})}
-						/>
-						{errors.discountPercentage && (
-							<p className='text-sm text-destructive'>
-								{errors.discountPercentage.message}
-							</p>
-						)}
-					</div>
-				</div>
-
-				<div className='flex items-center gap-2'>
-					<input
-						id='isActive'
-						type='checkbox'
-						className='size-4 rounded border-input'
-						{...register('isActive')}
-					/>
-					<Label htmlFor='isActive' className='cursor-pointer'>
-						Activa
-					</Label>
-				</div>
-			</section>
-
-			<section className='grid gap-4'>
-				<h2 className='text-xl font-semibold'>Tallas con stock</h2>
-				<VariantSizesFieldArray
-					control={control}
-					register={register}
-					errors={errors}
-				/>
-			</section>
+				</section>
+			</div>
 
 			{showStockWarning && (
 				<p className='rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-700'>

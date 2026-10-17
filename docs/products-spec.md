@@ -34,12 +34,16 @@ El SQL vive en `docs/sql/01-products-schema.sql` y `docs/sql/02-storage-policies
 - Subida con `cacheControl` de un año.
 - La base de datos guarda el `path`. La URL pública se arma en el mapper con `getPublicUrl(path)`.
 - Antes de subir: validar tipo y tamaño en el cliente, y comprimir y redimensionar en el navegador (WebP, lado máximo 1600 px).
+- Políticas de `storage.objects` (ver `docs/sql/02-storage-policies.sql`): subir, actualizar, borrar y **leer** (SELECT). La de lectura es obligatoria para que el borrado funcione; sin ella el borrado en lote devuelve una lista vacía sin error y deja el archivo huérfano.
+- Al borrar una imagen se borra primero el archivo del bucket y luego la fila. Si el bucket no confirma el borrado (lista vacía), la acción falla y la fila se conserva para no dejar archivos huérfanos.
 
 ## Reglas de negocio
 
 - La variante de portada es la activa con menor `display_order`. Si no hay ninguna activa, el producto no aparece en la tienda.
 - El `display_order` no se edita en el formulario: al crear una variante se asigna el mayor existente + 1 y el orden se cambia con las flechas subir y bajar del detalle. Así no se repite el mismo orden.
 - No se puede activar una variante sin al menos una imagen. La primera imagen (menor `display_order`) es la principal.
+- El estado activo se cambia solo desde el detalle del producto; al crear una variante nace inactiva.
+- No se puede borrar la última imagen de una variante activa; primero se desactiva.
 - Se avisa, sin bloquear, si una variante activa no tiene ninguna talla con stock.
 - El stock lo ajusta el admin a mano. No hay descuento automático.
 - La baja normal es `is_active = false`. El borrado real pide confirmación, indica cuánto se pierde y elimina primero los archivos del bucket y luego las filas.
@@ -61,8 +65,8 @@ El SQL vive en `docs/sql/01-products-schema.sql` y `docs/sql/02-storage-policies
 ## Errores de negocio
 
 - `ProductError`: `duplicate_name`, `not_found`.
-- `ProductVariantError`: `duplicate_slug`, `duplicate_name`, `not_found`.
-- Los errores de imágenes (tipo o tamaño inválido, fallo de subida) se tratan en la capa de subida con mensajes en español.
+- `ProductVariantError`: `duplicate_slug`, `duplicate_name`, `image_required`, `not_found`.
+- `VariantImageError`: `invalid_type`, `too_large`, `upload_failed`, `delete_failed`, `reorder_failed`, `active_variant`, `not_found`. Los errores de imágenes (tipo o tamaño inválido, fallo de subida o borrado) se tratan en la capa de subida con mensajes en español.
 
 ## Admin
 
@@ -76,9 +80,10 @@ Rutas bajo `/admin`:
 
 - **Lista**: miniatura de portada, nombre, marca, categoría, cantidad de variantes y stock total. Filtros por marca, categoría y búsqueda por nombre. Aviso en los productos sin variantes activas.
 - **Detalle del producto**: datos del producto arriba. Debajo, la lista de variantes con miniatura, nombre, precio, descuento, interruptor de activa y resumen de stock. La primera lleva la insignia "Portada". Flechas de subir y bajar cambian el orden. Botón "Agregar variante".
-- **Formulario de variante**: tres secciones. Datos (nombre, slug, descripción, precio, descuento, activa), tallas con stock (filas que se agregan una a una) y galería de imágenes.
+- **Formulario de variante**: tres tarjetas blancas separadas. Datos de la variante (nombre, slug, descripción, precio y descuento) a la izquierda, imágenes a su derecha y tallas con stock debajo de los datos.
   - Al crear, se guardan datos y tallas, y se redirige a la edición de la misma variante, donde se habilita la galería (porque la ruta del archivo lleva el id de la variante).
-  - En la galería: subir varias, reordenar y borrar. La primera imagen es la principal.
+  - El estado activo no se edita aquí: se cambia con el interruptor del detalle del producto.
+  - En la galería: se suben imágenes arrastrando y soltando (o con el selector de archivos), se reordenan con flechas izquierda y derecha y se borran con confirmación. La primera imagen es la principal.
 - **Panel rápido de stock**: en el detalle del producto, cada variante se expande y muestra sus tallas con un campo numérico que se guarda al salir del campo. Es la operación más frecuente, debe ser de dos clics.
 
 ## Tienda
@@ -96,7 +101,7 @@ Cada etapa lleva datos, hooks y pantallas, y debe poder probarse al terminar. Im
 
 - [x] Etapa 1, productos (el modelo): interface, mapper, schema, error, actions, hooks, lista, formulario, rutas e ítem del menú. La lista ya trae marca, categoría y variantes en una sola consulta.
 - [x] Etapa 2, variantes con tallas: detalle del producto con lista de variantes y formulario de variante (datos y tallas).
-- [ ] Etapa 3, imágenes: galería de la variante con subida, orden y borrado, compresión en el cliente y limpieza del bucket.
+- [x] Etapa 3, imágenes: galería de la variante con subida, orden y borrado, compresión en el cliente y limpieza del bucket.
 - [ ] Etapa 4, panel rápido de stock.
 - [ ] Etapa 5, tienda: card del catálogo y página de variante con carrusel.
 - [ ] Etapa 6, carrito y checkout (decisión pendiente: pedido por WhatsApp o tablas de pedidos).

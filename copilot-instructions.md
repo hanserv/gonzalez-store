@@ -127,7 +127,7 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 - El título que ve el cliente se compone con el nombre del producto y el nombre de la variante. La URL pertenece a la variante (su slug).
 - La variante de portada es la activa con menor `display_order`.
 - El stock vive por talla en `variant_sizes` y lo ajusta el admin a mano. Nunca descuentes stock automáticamente.
-- Una variante no se puede activar sin al menos una imagen.
+- Una variante no se puede activar sin al menos una imagen. El estado activo se cambia solo desde el detalle del producto.
 - Al borrar una variante o una imagen, elimina primero los archivos del bucket y luego las filas. Las bajas normales se hacen con `is_active = false`.
 - Los archivos se suben con nombre único (uuid) y nunca se sobrescriben.
 
@@ -148,8 +148,8 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 
 - Terminado: categories (CRUD completo), login y layout de auth.
 - Brands: CRUD completo, lista en admin, formularios, rutas `/admin/brands` y menú lateral listos.
-- Productos: Etapa 1 (productos) y Etapa 2 (variantes con tallas) terminadas. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
-- Después: imágenes (Etapa 3), panel rápido de stock (Etapa 4), tienda pública (Etapa 5) y carrito y checkout (Etapa 6).
+- Productos: Etapa 1 (productos), Etapa 2 (variantes con tallas) y Etapa 3 (imágenes) terminadas. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
+- Después: panel rápido de stock (Etapa 4), tienda pública (Etapa 5) y carrito y checkout (Etapa 6).
   Actualiza esta sección al terminar cada etapa.
 
 ## Deuda técnica (refactor final)
