@@ -19,14 +19,24 @@ export const ProductRow = ({product, onDeleteClick}: ProductRowProps) => (
 	<TableRow>
 		<TableCell>
 			<div className='flex items-center gap-3'>
-				<div className='flex size-10 items-center justify-center rounded-md bg-muted text-xs font-semibold text-muted-foreground'>
-					{product.name.slice(0, 1).toUpperCase()}
-				</div>
+				{product.coverImageUrl ? (
+					<img
+						src={product.coverImageUrl}
+						alt={product.name}
+						className='size-10 rounded-md border border-gray-200 object-cover'
+					/>
+				) : (
+					<div className='flex size-10 items-center justify-center rounded-md bg-muted text-xs font-semibold text-muted-foreground'>
+						{product.name.slice(0, 1).toUpperCase()}
+					</div>
+				)}
 				<div>
 					<p className='font-medium'>{product.name}</p>
-					<p className='text-xs text-muted-foreground'>
-						{product.coverImageUrl ? 'Con portada' : 'Sin imagen'}
-					</p>
+					{product.activeVariantCount === 0 && (
+						<p className='text-xs font-medium text-amber-600'>
+							Sin variantes activas
+						</p>
+					)}
 				</div>
 			</div>
 		</TableCell>

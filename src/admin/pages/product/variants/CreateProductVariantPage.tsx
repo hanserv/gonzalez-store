@@ -1,5 +1,4 @@
-import {useNavigate, useParams} from 'react-router';
-import {Navigate} from 'react-router';
+import {Navigate, useNavigate, useParams} from 'react-router';
 import {AdminTitle} from '@/admin/components/AdminTitle';
 import {useCreateProductVariant} from '@/admin/hooks/products/useCreateProductVariant';
 import {useProduct} from '@/admin/hooks/products/useProduct';
@@ -13,52 +12,50 @@ const emptyValues: ProductVariantFormValues = {
 	price: 0,
 	discountPercentage: 0,
 	isActive: true,
-	displayOrder: 1,
 	sizes: [{size: '', stock: 0}],
 };
 
 export const CreateProductVariantPage = () => {
 	const {productId} = useParams();
-	const navigate = useNavigate();
 
 	if (!productId) return <Navigate to='/admin/products' replace />;
 
-	return (
-		<CreateProductVariantContent
-			productId={productId}
-			onDone={() => navigate(`/admin/products/${productId}`)}
-		/>
-	);
+	return <CreateProductVariantContent productId={productId} />;
 };
 
 interface CreateProductVariantContentProps {
 	productId: string;
-	onDone: () => void;
 }
 
 const CreateProductVariantContent = ({
 	productId,
-	onDone,
 }: CreateProductVariantContentProps) => {
-	const {data: product, isLoading} = useProduct(productId);
+	const navigate = useNavigate();
+	const {data: product} = useProduct(productId);
 	const {mutate, isPending} = useCreateProductVariant();
 
 	const handleSubmit = (values: ProductVariantFormValues) => {
-		mutate({productId, ...values}, {onSuccess: onDone});
+		mutate(
+			{productId, ...values},
+			{
+				onSuccess: (variant) =>
+					navigate(`/admin/products/${productId}/variants/${variant.id}`),
+			},
+		);
 	};
 
 	return (
-		<div className='flex flex-col gap-5'>
-			<AdminTitle
-				title='Nueva variante'
-				subtitle='La variante guarda nombre, slug, precio y tallas'
-			/>
-
-			{!isLoading && product && (
-				<p className='text-sm text-muted-foreground'>
-					Producto: {product.name}
-				</p>
-			)}
+		<>
+			<div className='mb-5 mx-auto max-w-3xl'>
+				<AdminTitle
+					title='Nueva variante'
+					subtitle={
+						product
+							? `Producto: ${product.name}`
+							: 'La variante guarda nombre, slug, precio y tallas'
+					}
+				/>
+			</div>
 
 			<ProductVariantForm
 				defaultValues={emptyValues}
@@ -66,7 +63,9 @@ const CreateProductVariantContent = ({
 				submitLabel='Crear variante'
 				onSubmit={handleSubmit}
 				onCancelUrl={`/admin/products/${productId}`}
+				productName={product?.name}
+				proposeSlug
 			/>
-		</div>
+		</>
 	);
 };

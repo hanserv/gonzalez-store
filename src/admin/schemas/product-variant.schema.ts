@@ -38,13 +38,10 @@ export const productVariantSchema = z.object({
 		.min(0, 'El descuento no puede ser negativo')
 		.max(100, 'El descuento no puede superar 100'),
 	isActive: z.boolean(),
-	displayOrder: z.coerce
-		.number()
-		.int('El orden debe ser un número entero')
-		.min(0, 'El orden no puede ser negativo'),
 	sizes: z
 		.array(productVariantSizeSchema)
 		.min(1, 'Debes agregar al menos una talla'),
 });
 
 export type ProductVariantFormValues = z.infer<typeof productVariantSchema>;
+export type ProductVariantFormInput = z.input<typeof productVariantSchema>;

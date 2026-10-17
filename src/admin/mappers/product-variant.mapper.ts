@@ -13,7 +13,9 @@ const mapVariantImage = ({
 	id,
 	path,
 	display_order,
-}: ProductVariantDetailRow['variant_images'][number]): ProductVariantImage => ({
+}: NonNullable<
+	ProductVariantDetailRow['variant_images']
+>[number]): ProductVariantImage => ({
 	id,
 	path,
 	url: supabase.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(path).data
@@ -25,7 +27,9 @@ const mapVariantSize = ({
 	id,
 	size,
 	stock,
-}: ProductVariantDetailRow['variant_sizes'][number]): ProductVariantSize => ({
+}: NonNullable<
+	ProductVariantDetailRow['variant_sizes']
+>[number]): ProductVariantSize => ({
 	id,
 	size,
 	stock,
@@ -59,7 +63,9 @@ export const prepareProductVariantForSave = (input: ProductVariantInput) => ({
 	price: input.price,
 	discount_percentage: input.discountPercentage,
 	is_active: input.isActive,
-	display_order: input.displayOrder,
+	...(input.displayOrder !== undefined
+		? {display_order: input.displayOrder}
+		: {}),
 });
 
 export const prepareProductVariantSizesForSave = (

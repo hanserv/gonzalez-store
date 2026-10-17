@@ -1,3 +1,4 @@
+import {supabase} from '@/supabase/supabase';
 import type {
 	Product,
 	ProductDetail,
@@ -8,6 +9,27 @@ import type {
 	ProductRow,
 } from '@/admin/interfaces/product.interface';
 import {mapProductVariant} from '@/admin/mappers/product-variant.mapper';
+
+const PRODUCT_IMAGES_BUCKET = 'product-images';
+
+const getCoverImageUrl = (
+	variants: ProductListItemRow['product_variants'],
+): string | null => {
+	const coverVariant = (variants ?? [])
+		.filter((variant) => variant.is_active)
+		.slice()
+		.sort((first, second) => first.display_order - second.display_order)[0];
+
+	const coverImage = (coverVariant?.variant_images ?? [])
+		.slice()
+		.sort((first, second) => first.display_order - second.display_order)[0];
+
+	if (!coverImage) return null;
+
+	return supabase.storage
+		.from(PRODUCT_IMAGES_BUCKET)
+		.getPublicUrl(coverImage.path).data.publicUrl;
+};
 
 export const mapProduct = (row: ProductRow): Product => ({
 	id: row.id,
@@ -40,7 +62,7 @@ export const mapProductListItem = (
 
 			return total + variantStock;
 		}, 0),
-		coverImageUrl: null,
+		coverImageUrl: getCoverImageUrl(row.product_variants),
 	};
 };
 

@@ -4,12 +4,15 @@ import type {Control, FieldErrors, UseFormRegister} from 'react-hook-form';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
-import type {ProductVariantFormValues} from '@/admin/schemas/product-variant.schema';
+import type {
+	ProductVariantFormInput,
+	ProductVariantFormValues,
+} from '@/admin/schemas/product-variant.schema';
 
 interface VariantSizesFieldArrayProps {
-	control: Control<ProductVariantFormValues>;
-	register: UseFormRegister<ProductVariantFormValues>;
-	errors: FieldErrors<ProductVariantFormValues>;
+	control: Control<ProductVariantFormInput, unknown, ProductVariantFormValues>;
+	register: UseFormRegister<ProductVariantFormInput>;
+	errors: FieldErrors<ProductVariantFormInput>;
 }
 
 export const VariantSizesFieldArray = ({

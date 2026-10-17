@@ -13,7 +13,9 @@ export const CreateProductPage = () => {
 	const {mutate, isPending} = useCreateProduct();
 
 	const handleSubmit = (values: ProductInput) => {
-		mutate(values, {onSuccess: () => navigate('/admin/products')});
+		mutate(values, {
+			onSuccess: (product) => navigate(`/admin/products/${product.id}`),
+		});
 	};
 
 	return (

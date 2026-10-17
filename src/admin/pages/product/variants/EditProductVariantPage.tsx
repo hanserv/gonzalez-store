@@ -42,26 +42,26 @@ const EditProductVariantContent = ({
 	};
 
 	return (
-		<div className='flex flex-col gap-5'>
-			<AdminTitle
-				title='Editar variante'
-				subtitle='Ajusta los datos y las tallas de la variante'
-			/>
-
-			{product && (
-				<p className='text-sm text-muted-foreground'>
-					Producto: {product.name}
-				</p>
-			)}
+		<>
+			<div className='mb-5 mx-auto max-w-3xl'>
+				<AdminTitle
+					title='Editar variante'
+					subtitle={
+						product
+							? `Producto: ${product.name}`
+							: 'Ajusta los datos y las tallas de la variante'
+					}
+				/>
+			</div>
 
 			{isLoading && (
-				<div className='rounded-xl border border-gray-200 bg-white p-6'>
+				<div className='mx-auto flex max-w-3xl flex-col gap-5 rounded-xl border border-gray-200 bg-white p-6'>
 					<p className='text-sm text-muted-foreground'>Cargando variante...</p>
 				</div>
 			)}
 
 			{isError && (
-				<div className='rounded-xl border border-gray-200 bg-white p-10 text-center'>
+				<div className='mx-auto flex max-w-3xl flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white p-10 text-center'>
 					<p className='text-sm text-muted-foreground'>
 						No se encontró la variante.
 					</p>
@@ -77,7 +77,6 @@ const EditProductVariantContent = ({
 						price: variant.price,
 						discountPercentage: variant.discountPercentage,
 						isActive: variant.isActive,
-						displayOrder: variant.displayOrder,
 						sizes:
 							variant.sizes.length > 0 ? variant.sizes : [{size: '', stock: 0}],
 					}}
@@ -87,6 +86,6 @@ const EditProductVariantContent = ({
 					onCancelUrl={`/admin/products/${productId}`}
 				/>
 			)}
-		</div>
+		</>
 	);
 };

@@ -40,7 +40,7 @@ export interface ProductVariantInput {
 	price: number;
 	discountPercentage: number;
 	isActive: boolean;
-	displayOrder: number;
+	displayOrder?: number;
 	sizes: Array<{size: string; stock: number}>;
 }
 

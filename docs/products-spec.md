@@ -38,27 +38,30 @@ El SQL vive en `docs/sql/01-products-schema.sql` y `docs/sql/02-storage-policies
 ## Reglas de negocio
 
 - La variante de portada es la activa con menor `display_order`. Si no hay ninguna activa, el producto no aparece en la tienda.
+- El `display_order` no se edita en el formulario: al crear una variante se asigna el mayor existente + 1 y el orden se cambia con las flechas subir y bajar del detalle. Así no se repite el mismo orden.
 - No se puede activar una variante sin al menos una imagen. La primera imagen (menor `display_order`) es la principal.
 - Se avisa, sin bloquear, si una variante activa no tiene ninguna talla con stock.
 - El stock lo ajusta el admin a mano. No hay descuento automático.
 - La baja normal es `is_active = false`. El borrado real pide confirmación, indica cuánto se pierde y elimina primero los archivos del bucket y luego las filas.
 - El slug de la variante se propone a partir de "nombre del producto + nombre de la variante", es editable y sigue la regex de brands (minúsculas, números y guiones).
 - Las tallas son texto ("9.5", "M"). El orden de presentación lo resuelve la interfaz con listas predefinidas (numeración para tenis, S a XL para camisetas), no la base de datos.
+- Los precios se muestran en pesos dominicanos (`DOP`) con formato `es-DO`.
 
 ## Modelos de la aplicación
 
 - `Product`: `id`, `name`, `brandId`, `categoryId`, `createdAt`.
 - `ProductListItem` (lista del admin): `Product` más `brandName`, `categoryName`, `variantCount`, `activeVariantCount`, `totalStock` y `coverImageUrl`.
-- `Variant`: `id`, `productId`, `name`, `slug`, `description` (string o null), `price` (number), `discountPercentage`, `isActive`, `displayOrder`, `createdAt`, `images` y `sizes`.
-- `VariantImage`: `id`, `variantId`, `path`, `url` (armada en el mapper), `displayOrder`.
-- `VariantSize`: `id`, `variantId`, `size`, `stock`.
-- `VariantInput`: `name`, `slug`, `description` (string), `price`, `discountPercentage`, `isActive`, `displayOrder` y `sizes` (lista de `size` y `stock`).
+- `ProductVariant`: `id`, `productId`, `name`, `slug`, `description` (string o null), `price` (number), `discountPercentage`, `isActive`, `displayOrder`, `createdAt`, `images` y `sizes`.
+- `ProductVariantImage`: `id`, `path`, `url` (armada en el mapper), `displayOrder`.
+- `ProductVariantSize`: `id`, `size`, `stock`.
+- `ProductVariantInput`: `productId`, `name`, `slug`, `description` (string), `price`, `discountPercentage`, `isActive`, `sizes` (lista de `size` y `stock`) y `displayOrder` opcional. El orden no se edita en el formulario: al crear se asigna el mayor existente + 1 y luego se ajusta con las flechas.
+- Los modelos del módulo llevan el prefijo `ProductVariant` para coincidir con los nombres del código.
 - Los campos numéricos del formulario usan `z.coerce.number()`, así que el tipo de entrada y el de salida del esquema difieren: usar los tres genéricos de `useForm`.
 
 ## Errores de negocio
 
 - `ProductError`: `duplicate_name`, `not_found`.
-- `VariantError`: `duplicate_slug`, `duplicate_name`, `not_found`.
+- `ProductVariantError`: `duplicate_slug`, `duplicate_name`, `not_found`.
 - Los errores de imágenes (tipo o tamaño inválido, fallo de subida) se tratan en la capa de subida con mensajes en español.
 
 ## Admin
@@ -73,7 +76,7 @@ Rutas bajo `/admin`:
 
 - **Lista**: miniatura de portada, nombre, marca, categoría, cantidad de variantes y stock total. Filtros por marca, categoría y búsqueda por nombre. Aviso en los productos sin variantes activas.
 - **Detalle del producto**: datos del producto arriba. Debajo, la lista de variantes con miniatura, nombre, precio, descuento, interruptor de activa y resumen de stock. La primera lleva la insignia "Portada". Flechas de subir y bajar cambian el orden. Botón "Agregar variante".
-- **Formulario de variante**: tres secciones. Datos (nombre, slug, descripción, precio, descuento, activa, orden), tallas con stock (filas, con atajos como "38 a 46" y "S a XL") y galería de imágenes.
+- **Formulario de variante**: tres secciones. Datos (nombre, slug, descripción, precio, descuento, activa), tallas con stock (filas que se agregan una a una) y galería de imágenes.
   - Al crear, se guardan datos y tallas, y se redirige a la edición de la misma variante, donde se habilita la galería (porque la ruta del archivo lleva el id de la variante).
   - En la galería: subir varias, reordenar y borrar. La primera imagen es la principal.
 - **Panel rápido de stock**: en el detalle del producto, cada variante se expande y muestra sus tallas con un campo numérico que se guarda al salir del campo. Es la operación más frecuente, debe ser de dos clics.
@@ -91,8 +94,8 @@ Rutas bajo `/admin`:
 
 Cada etapa lleva datos, hooks y pantallas, y debe poder probarse al terminar. Implementar una etapa por vez, replicando el patrón de `brands` y `categories`.
 
-- [ ] Etapa 1, productos (el modelo): interface, mapper, schema, error, actions, hooks, lista, formulario, rutas e ítem del menú. La lista ya trae marca, categoría y variantes en una sola consulta.
-- [ ] Etapa 2, variantes con tallas: detalle del producto con lista de variantes y formulario de variante (datos y tallas).
+- [x] Etapa 1, productos (el modelo): interface, mapper, schema, error, actions, hooks, lista, formulario, rutas e ítem del menú. La lista ya trae marca, categoría y variantes en una sola consulta.
+- [x] Etapa 2, variantes con tallas: detalle del producto con lista de variantes y formulario de variante (datos y tallas).
 - [ ] Etapa 3, imágenes: galería de la variante con subida, orden y borrado, compresión en el cliente y limpieza del bucket.
 - [ ] Etapa 4, panel rápido de stock.
 - [ ] Etapa 5, tienda: card del catálogo y página de variante con carrusel.
@@ -100,5 +103,4 @@ Cada etapa lleva datos, hooks y pantallas, y debe poder probarse al terminar. Im
 
 ## Pendientes de confirmar
 
-- Moneda y formato de precios.
 - Nombres exactos de carpetas y archivos de `src/admin`: seguir los que ya usa `brands`.

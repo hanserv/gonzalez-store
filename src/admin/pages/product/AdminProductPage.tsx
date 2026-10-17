@@ -2,16 +2,18 @@ import {Link, Navigate, useParams} from 'react-router';
 import {ArrowLeft} from 'lucide-react';
 import {AdminTitle} from '@/admin/components/AdminTitle';
 import {useProduct} from '@/admin/hooks/products/useProduct';
+import {useReorderProductVariants} from '@/admin/hooks/products/useReorderProductVariants';
+import {useToggleProductVariantActive} from '@/admin/hooks/products/useToggleProductVariantActive';
 import {buttonVariants, Button} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';
 import {ProductVariantsTable} from './ui/ProductVariantsTable';
 
 export const AdminProductPage = () => {
-	const {id} = useParams();
+	const {productId} = useParams();
 
-	if (!id) return <Navigate to='/admin/products' replace />;
+	if (!productId) return <Navigate to='/admin/products' replace />;
 
-	return <AdminProductContent productId={id} />;
+	return <AdminProductContent productId={productId} />;
 };
 
 interface AdminProductContentProps {
@@ -20,6 +22,16 @@ interface AdminProductContentProps {
 
 const AdminProductContent = ({productId}: AdminProductContentProps) => {
 	const {data: product, isLoading, isError} = useProduct(productId);
+	const {mutate: toggleActive} = useToggleProductVariantActive(productId);
+	const {mutate: reorder} = useReorderProductVariants(productId);
+
+	const handleToggleActive = (id: string, isActive: boolean) => {
+		toggleActive({id, isActive});
+	};
+
+	const handleReorder = (orderedIds: string[]) => {
+		reorder({orderedIds});
+	};
 
 	return (
 		<div className='flex flex-col gap-5'>
@@ -88,6 +100,8 @@ const AdminProductContent = ({productId}: AdminProductContentProps) => {
 					<ProductVariantsTable
 						productId={product.id}
 						variants={product.variants}
+						onToggleActive={handleToggleActive}
+						onReorder={handleReorder}
 					/>
 				</>
 			)}

@@ -19,6 +19,14 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 - Sonner para notificaciones.
 - El alias `@` apunta a `src/`.
 
+## Convenciones
+
+- Gestor de paquetes: pnpm (nunca npm ni yarn).
+- UI: shadcn/ui con Base UI (`@base-ui/react`), NO Radix. No usar `asChild`; usar `render` o `buttonVariants`.
+- No instalar ni eliminar dependencias sin preguntarme.
+- No modificar archivos fuera del alcance de lo pedido.
+- Mantener el estilo de código existente (tabs, comillas simples).
+
 ## Comandos
 
 - Gestor de paquetes: pnpm. Nunca uses npm, npx ni yarn. Para ejecutar binarios sin instalarlos usa `pnpm dlx`.
@@ -140,8 +148,8 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 
 - Terminado: categories (CRUD completo), login y layout de auth.
 - Brands: CRUD completo, lista en admin, formularios, rutas `/admin/brands` y menú lateral listos.
-- En progreso: módulo de productos con variantes, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
-- Después: tienda pública (catálogo y página de variante), carrito y checkout.
+- Productos: Etapa 1 (productos) y Etapa 2 (variantes con tallas) terminadas. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
+- Después: imágenes (Etapa 3), panel rápido de stock (Etapa 4), tienda pública (Etapa 5) y carrito y checkout (Etapa 6).
   Actualiza esta sección al terminar cada etapa.
 
 ## Deuda técnica (refactor final)

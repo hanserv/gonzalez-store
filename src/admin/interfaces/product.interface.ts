@@ -39,6 +39,8 @@ export interface ProductListItemRow {
 	category: {name: string} | null;
 	product_variants: Array<{
 		is_active: boolean;
+		display_order: number;
+		variant_images: Array<{path: string; display_order: number}> | null;
 		variant_sizes: Array<{stock: number}> | null;
 	}> | null;
 }

@@ -13,9 +13,21 @@ import {supabase} from '@/supabase/supabase';
 export const createProductVariantAction = async (
 	input: ProductVariantInput,
 ): Promise<ProductVariant> => {
+	const {data: lastVariant, error: lastVariantError} = await supabase
+		.from('product_variants')
+		.select('display_order')
+		.eq('product_id', input.productId)
+		.order('display_order', {ascending: false})
+		.limit(1)
+		.maybeSingle();
+
+	if (lastVariantError) throw toProductVariantError(lastVariantError);
+
+	const displayOrder = (lastVariant?.display_order ?? 0) + 1;
+
 	const {data, error} = await supabase
 		.from('product_variants')
-		.insert(prepareProductVariantForSave(input))
+		.insert(prepareProductVariantForSave({...input, displayOrder}))
 		.select(
 			'id,product_id,name,slug,description,price,discount_percentage,is_active,display_order,created_at,variant_images(id,path,display_order),variant_sizes(id,size,stock)',
 		)
