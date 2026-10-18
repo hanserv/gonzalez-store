@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Link, NavLink} from 'react-router';
 import {Menu, ShoppingCart, UserCog, X} from 'lucide-react';
 import {Button, buttonVariants} from '@/components/ui/button';
@@ -9,7 +9,7 @@ import {cn} from '@/lib/utils';
 interface ShopHeaderProps {
 	backgroundColor?: string;
 	textColor?: string;
-	position?: 'sticky' | 'absolute';
+	position?: 'sticky' | 'absolute' | 'fixed';
 }
 
 interface NavItem {
@@ -24,10 +24,19 @@ const navItems: NavItem[] = [
 	{label: 'Sobre nosotros', to: '/about'},
 ];
 
+const DARK_INK = '#111827';
+const LOGO_WHITE = '/gonzalez-logo-white.png';
+const LOGO_DARK = '/gonzalez-logo.png';
+// Pixels of scroll before the header switches to its see through state
+const SCROLL_THRESHOLD = 8;
+// Scrolled look: a light veil of the brand black, so the page shows behind
+const SCROLLED_BACKGROUND = 'rgba(0, 0, 0, 0.12)';
+
 // Clases completas, para que Tailwind las detecte
 const positionClasses = {
 	sticky: 'sticky top-4',
 	absolute: 'absolute inset-x-0 top-4',
+	fixed: 'fixed inset-x-0 top-4',
 } as const;
 
 interface NavItemLinkProps extends NavItem {
@@ -72,30 +81,63 @@ const NavItemLink = ({
 
 export const ShopHeader = ({
 	backgroundColor = '#ffffff',
-	textColor = '#111827',
+	textColor = DARK_INK,
 	position = 'sticky',
 }: ShopHeaderProps) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isScrolled, setIsScrolled] = useState(false);
+	const [isHovered, setIsHovered] = useState(false);
 	const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
+
+	// The dark logo only shows in the see through state, so load it upfront
+	useEffect(() => {
+		const image = new Image();
+		image.src = LOGO_DARK;
+	}, []);
+
+	useEffect(() => {
+		const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
+
+		handleScroll();
+		window.addEventListener('scroll', handleScroll, {passive: true});
+
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, []);
+
+	// Solid while at the top, see through while scrolling, solid again on hover
+	// or with the mobile menu open
+	const isSeeThrough = isScrolled && !isHovered && !isOpen;
 
 	const closeMenu = () => setIsOpen(false);
 
 	return (
 		<header className={cn('z-50 px-4', positionClasses[position])}>
-			<div className='relative mx-auto max-w-5xl'>
+			<div
+				className='relative mx-auto max-w-5xl'
+				onMouseEnter={() => setIsHovered(true)}
+				onMouseLeave={() => setIsHovered(false)}
+			>
 				<div
-					className='flex items-center justify-between rounded-full px-5 py-3 shadow-lg md:grid md:grid-cols-[1fr_auto_1fr]'
-					style={{backgroundColor, color: textColor}}
+					className={cn(
+						'flex items-center justify-between rounded-full px-5 py-3 transition-[background-color,box-shadow,color] duration-300 ease-out md:grid md:grid-cols-[1fr_auto_1fr]',
+						isSeeThrough ? 'shadow-none' : 'shadow-lg',
+					)}
+					style={{
+						backgroundColor: isSeeThrough
+							? SCROLLED_BACKGROUND
+							: backgroundColor,
+						color: isSeeThrough ? DARK_INK : textColor,
+					}}
 				>
 					{/* Logo */}
 					<div className='justify-self-start'>
 						<CustomLogo
 							title={
 								<>
-									Gonzalez<span className='hidden lg:inline'> Peña</span>
+									<span className='hidden lg:inline'>gonzalez Peña</span>
 								</>
 							}
-							logoSrc='/gonzalez-logo-white.png'
+							logoSrc={isSeeThrough ? LOGO_DARK : LOGO_WHITE}
 							subtitleClassName='text-inherit opacity-70'
 							onClick={closeMenu}
 						/>

@@ -26,6 +26,7 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 - No instalar ni eliminar dependencias sin preguntarme.
 - No modificar archivos fuera del alcance de lo pedido.
 - Mantener el estilo de código existente (tabs, comillas simples).
+- Después de un cambio o de una feature relativamente importante, muestra siempre las opciones de commit (mensaje sugerido y archivos a incluir). El usuario hace los commits.
 
 ## Comandos
 
