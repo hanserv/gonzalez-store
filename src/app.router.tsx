@@ -2,6 +2,7 @@ import {createBrowserRouter, Navigate} from 'react-router';
 import {lazy} from 'react';
 import {ShopLayout} from './shop/layouts/ShopLayout';
 import {HomePage} from './shop/pages/home/HomePage';
+import {StorePage} from './shop/pages/store/StorePage';
 import {ProductPage} from './shop/pages/product/ProductPage';
 import {LoginPage} from './auth/pages/login/LoginPage';
 import {DashboardPage} from './admin/pages/dashboard/DashboardPage';
@@ -35,6 +36,10 @@ export const appRouter = createBrowserRouter([
 			{
 				index: true,
 				element: <HomePage />,
+			},
+			{
+				path: 'store',
+				element: <StorePage />,
 			},
 			{
 				path: 'product/:slug',
