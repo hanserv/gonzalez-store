@@ -45,5 +45,5 @@ test-results/
 .DS_Store
 Thumbs.db
 
-docs/
+docs/sql/
 supabase/.temp/

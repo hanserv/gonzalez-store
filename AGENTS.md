@@ -120,6 +120,7 @@ Cuando trabajes con datos de Supabase sigue siempre esta cadena. Cada entidad `X
 - Los constraints únicos se llaman `<tabla>_<columnas>_key` (por ejemplo `brands_slug_key`). `toXError` depende de esos nombres exactos, así que al crear una tabla nueva respétalos.
 - Tablas actuales: `brands`, `categories`, `products` (el modelo), `product_variants`, `variant_images` y `variant_sizes`.
 - Storage: bucket público `product-images`. Las imágenes se guardan en la base de datos como `path` (por ejemplo `variants/{variant_id}/{archivo}`), nunca como URL. La URL pública se arma en el mapper con `supabase.storage.from('product-images').getPublicUrl(path)`.
+- Las imágenes de producto son PNG sin fondo: la tienda las muestra centradas sobre un contenedor blanco de proporción fija y `object-contain`, con un zoom suave al hover, nunca con `object-cover`, para no recortarlas.
 
 ## Reglas del módulo de productos (resumen)
 
@@ -132,7 +133,7 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 - Una variante no se puede activar sin al menos una imagen. El estado activo se cambia solo desde el detalle del producto.
 - Al borrar una variante o una imagen, elimina primero los archivos del bucket y luego las filas. Las bajas normales se hacen con `is_active = false`.
 - Un producto solo se elimina cuando no tiene variantes (FK `restrict`). Deshabilita el botón de eliminar según `variantCount`, no `activeVariantCount`.
-- `products.is_popular` es un interruptor manual del producto. La tienda lo muestra como una etiqueta "Popular" superpuesta en la card, con `pointer-events-none`.
+- `products.is_popular` es un interruptor manual del producto. La tienda lo destaca con un anillo dorado en la card y una insignia "Popular" superpuesta (degradado dorado, estrella, `pointer-events-none`), y estos productos encabezan el catálogo mientras no haya filtros ni orden aplicado.
 - Los archivos se suben con nombre único (uuid) y nunca se sobrescriben.
 
 ## UI y experiencia
@@ -152,8 +153,10 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 
 - Terminado: categories (CRUD completo), login y layout de auth.
 - Brands: CRUD completo, lista en admin, formularios, rutas `/admin/brands` y menú lateral listos.
-- Productos: Etapa 1 (productos), Etapa 2 (variantes con tallas), Etapa 3 (imágenes), ajuste "producto popular" y ajuste de borrado de variantes terminados. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
-- Después: panel rápido de stock (Etapa 4), tienda pública (Etapa 5) y carrito y checkout (Etapa 6).
+- Productos: Etapa 1 (productos), Etapa 2 (variantes con tallas), Etapa 3 (imágenes), ajuste "producto popular", ajuste de borrado de variantes y ajuste de borrado de productos terminados. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
+- Dashboard: datos reales (stats por RPC `get_dashboard_stats`, últimas variantes y productos más vistos), sin mocks. Falta D6, el registro de interés (ver `docs/dashboard-spec.md`).
+- Tienda (Etapa 5) terminada: catálogo en `/store` con card por producto, panel "Filtrar y ordenar" (aside derecho con orden por precio/nombre, búsqueda, marca, categoría, slider de precio, solo ofertas y solo populares) y página de variante en `product/:slug` con carrusel. Código en `src/shop/`.
+- Después: panel rápido de stock (Etapa 4, aplazada), registro de interés del dashboard (D6) y carrito y checkout (Etapa 6).
   Actualiza esta sección al terminar cada etapa.
 
 ## Deuda técnica (refactor final)
