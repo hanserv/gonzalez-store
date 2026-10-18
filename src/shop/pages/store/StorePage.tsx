@@ -37,8 +37,12 @@ const applyFilters = (
 		if (!cover) return false;
 		if (search && !item.name.toLowerCase().includes(search)) return false;
 		if (filters.brandId && item.brandId !== filters.brandId) return false;
-		if (filters.categoryId && item.categoryId !== filters.categoryId) return false;
-		if (filters.onlyOnSale && !item.variants.some((v) => v.discountPercentage > 0))
+		if (filters.categoryId && item.categoryId !== filters.categoryId)
+			return false;
+		if (
+			filters.onlyOnSale &&
+			!item.variants.some((v) => v.discountPercentage > 0)
+		)
 			return false;
 		if (filters.onlyPopular && !item.isPopular) return false;
 		if (!Number.isNaN(min) && coverPrice(item) < min) return false;
@@ -74,7 +78,9 @@ export const StorePage = () => {
 	const {data: products, isLoading, isError, refetch} = useCatalog();
 	const {data: brands = []} = useShopBrands();
 	const {data: categories = []} = useShopCategories();
-	const [filters, setFilters] = useState<CatalogFilterValues>(EMPTY_CATALOG_FILTERS);
+	const [filters, setFilters] = useState<CatalogFilterValues>(
+		EMPTY_CATALOG_FILTERS,
+	);
 
 	const brandNames = useMemo(
 		() => new Map(brands.map((brand) => [brand.id, brand.name])),
@@ -149,7 +155,8 @@ export const StorePage = () => {
 			chips.push({
 				key: 'price',
 				label: `Precio: ${formatCurrency(low)} - ${formatCurrency(high)}`,
-				onRemove: () => setFilters((prev) => ({...prev, minPrice: '', maxPrice: ''})),
+				onRemove: () =>
+					setFilters((prev) => ({...prev, minPrice: '', maxPrice: ''})),
 			});
 		}
 
@@ -192,7 +199,7 @@ export const StorePage = () => {
 			<div className='mx-auto max-w-6xl px-6'>
 				<header className='mb-6 flex items-end justify-between gap-4'>
 					<div>
-						<h1 className='font-cinzel text-3xl font-bold text-neutral-950 md:text-4xl'>
+						<h1 className='text-3xl font-bold text-neutral-950 md:text-4xl'>
 							Tienda
 						</h1>
 						<div className='mt-2 h-1 w-12 bg-gonzalez-red' />

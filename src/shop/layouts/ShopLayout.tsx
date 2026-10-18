@@ -7,7 +7,7 @@ export const ShopLayout = () => {
 			<ShopHeader
 				backgroundColor='#000000'
 				textColor='#ffffff'
-				position='absolute'
+				position='fixed'
 			/>
 			<Outlet />
 		</>
