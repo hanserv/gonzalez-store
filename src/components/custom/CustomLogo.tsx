@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const CustomLogo = ({
-	title = 'Gonzalez',
+	title = 'gonzalez',
 	subtitle,
 	url = '/',
 	logoSrc,
