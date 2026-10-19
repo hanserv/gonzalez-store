@@ -13,6 +13,7 @@ export const useUpdateCategory = () => {
 		mutationFn: updateCategoryAction,
 		onSuccess: () => {
 			queryClient.invalidateQueries({queryKey: ['categories']});
+			queryClient.invalidateQueries({queryKey: ['dashboard']});
 			toast.success('Categoría actualizada correctamente.');
 		},
 		onError: (error) => {

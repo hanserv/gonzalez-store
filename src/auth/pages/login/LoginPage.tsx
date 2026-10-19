@@ -56,7 +56,7 @@ export const LoginPage = () => {
 									className='mb-4 h-16 w-auto object-contain'
 								/>
 
-								<CustomLogo title='Gonzalez Peña' url='/auth/login' />
+								<CustomLogo title='gonzalez Peña' url='/auth/login' />
 
 								<p className='text-balance text-muted-foreground font-inter mt-2'>
 									Ingresar al módulo de management

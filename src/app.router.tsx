@@ -2,11 +2,15 @@ import {createBrowserRouter, Navigate} from 'react-router';
 import {lazy} from 'react';
 import {ShopLayout} from './shop/layouts/ShopLayout';
 import {HomePage} from './shop/pages/home/HomePage';
+import {StorePage} from './shop/pages/store/StorePage';
 import {ProductPage} from './shop/pages/product/ProductPage';
 import {LoginPage} from './auth/pages/login/LoginPage';
 import {DashboardPage} from './admin/pages/dashboard/DashboardPage';
 import {AdminProductsPage} from './admin/pages/products/AdminProductsPage';
+import {CreateProductPage} from './admin/pages/products/CreateProductPage';
 import {AdminProductPage} from './admin/pages/product/AdminProductPage';
+import {CreateProductVariantPage} from './admin/pages/product/variants/CreateProductVariantPage';
+import {EditProductVariantPage} from './admin/pages/product/variants/EditProductVariantPage';
 import {
 	AuthenticatedRoute,
 	NotAuthenticatedRoute,
@@ -32,6 +36,10 @@ export const appRouter = createBrowserRouter([
 			{
 				index: true,
 				element: <HomePage />,
+			},
+			{
+				path: 'store',
+				element: <StorePage />,
 			},
 			{
 				path: 'product/:slug',
@@ -78,8 +86,20 @@ export const appRouter = createBrowserRouter([
 				element: <AdminProductsPage />,
 			},
 			{
-				path: 'products/:id',
+				path: 'products/new',
+				element: <CreateProductPage />,
+			},
+			{
+				path: 'products/:productId',
 				element: <AdminProductPage />,
+			},
+			{
+				path: 'products/:productId/variants/new',
+				element: <CreateProductVariantPage />,
+			},
+			{
+				path: 'products/:productId/variants/:variantId',
+				element: <EditProductVariantPage />,
 			},
 			{
 				path: 'categories',
