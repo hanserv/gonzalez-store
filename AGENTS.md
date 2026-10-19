@@ -46,6 +46,7 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 - Haz cambios mínimos y relacionados con la tarea. No reformatees archivos completos ni toques código ajeno a lo pedido.
 - UI: shadcn/ui con Base UI (`@base-ui/react`), NO Radix. No uses `asChild`; usa `render` o `buttonVariants`.
 - No instales ni elimines dependencias sin preguntar.
+- Después de un cambio o de una feature relativamente importante, muestra siempre las opciones de commit (mensaje sugerido y archivos a incluir). El usuario hace los commits.
 
 ## Estilo de código
 

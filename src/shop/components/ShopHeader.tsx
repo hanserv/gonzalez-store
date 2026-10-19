@@ -12,7 +12,7 @@ interface ShopHeaderProps {
 	position?: 'sticky' | 'absolute' | 'fixed';
 }
 
-interface NavItem {
+export interface NavItem {
 	label: string;
 	to: string;
 	end?: boolean;

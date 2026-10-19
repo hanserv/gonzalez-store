@@ -121,6 +121,9 @@ Pantallas:
   - Los filtros y el orden activos se resumen en chips que se pueden quitar de uno en uno, más un botón "Limpiar todo" (también en el pie del panel, junto a "Ver resultados" que cierra el aside).
   - Se filtra en cliente sobre el catálogo cargado. El estado vacío distingue entre "Aún no hay productos disponibles" y "No hay productos que coincidan con esos filtros".
   - Los selects de marca y categoría se alimentan de `getShopBrandsAction` y `getShopCategoriesAction` (consultas públicas).
+- **Pie de página de la tienda** (`ShopFooter`): fondo negro sólido, igual que el header. Aparece en las páginas de la tienda (`/store`, `product/:slug` y las que se sumen, como "Sobre nosotros") y nunca en el inicio, donde solo vive el hero; lo controla el layout según la ruta. Lleva el logo blanco con el wordmark "gonzalez Peña", una línea corta roja de acento, los dos lemas del inicio ("Pasos pequeños. Huellas gigantes." y "Persiste e Insiste."), la navegación pública (los mismos enlaces del header, reutiliza `navItems` para que no se desincronicen) y los accesos a las redes. Cierra con una barra inferior separada por una línea tenue con el aviso de derechos y el año en curso.
+  - Las redes (Instagram, WhatsApp y TikTok) se arman desde variables de entorno: `VITE_INSTAGRAM_USER`, `VITE_TIKTOK_USER` y `VITE_WHATSAPP_NUMBER`. El número de WhatsApp se limpia a solo dígitos porque `wa.me` no acepta espacios ni guiones. Si una variable no está definida, esa red no se muestra, así el pie nunca queda con enlaces rotos.
+  - `lucide-react` no incluye iconos de marcas, así que los tres se dibujan como SVG en línea (`SocialIcons`), con el mismo trazo del resto de la interfaz.
 
 ## Plan por etapas
 
@@ -133,7 +136,7 @@ Cada etapa lleva datos, hooks y pantallas, y debe poder probarse al terminar. Im
 - [x] Ajuste, borrado de variantes: `deleteProductVariantAction` (archivos del bucket y luego filas) y botón con confirmación en el detalle del producto.
 - [x] Ajuste, borrado de productos: FK `restrict` en `product_variants`, código de error `in_use` y botón de eliminar deshabilitado cuando el producto tiene variantes.
 - [ ] Etapa 4, panel rápido de stock.
-- [x] Etapa 5, tienda: catálogo en `/store` con card por producto, filtros y página de variante en `product/:slug` con carrusel.
+- [x] Etapa 5, tienda: catálogo en `/store` con card por producto, filtros, página de variante en `product/:slug` con carrusel y pie de página con navegación y redes tomadas del `.env`.
 - [ ] Etapa 6, carrito y checkout (decisión pendiente: pedido por WhatsApp o tablas de pedidos).
 
 ## Pendientes de confirmar
