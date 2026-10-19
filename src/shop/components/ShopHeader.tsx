@@ -157,7 +157,7 @@ export const ShopHeader = ({
 								to='/admin'
 								className={cn(
 									buttonVariants({variant: 'outline', size: 'sm'}),
-									'hidden rounded-full border-current/30 bg-gonzalez-bone text-black hover:text-gonzalez-red md:inline-flex',
+									'hidden rounded-full border-current/30 bg-gray-50 text-black hover:text-gonzalez-red md:inline-flex',
 								)}
 							>
 								<UserCog />
