@@ -6,6 +6,7 @@ import {StorePage} from './shop/pages/store/StorePage';
 import {ProductPage} from './shop/pages/product/ProductPage';
 import {LoginPage} from './auth/pages/login/LoginPage';
 import {DashboardPage} from './admin/pages/dashboard/DashboardPage';
+import {AboutPage} from './shop/pages/about/AboutPage';
 import {AdminProductsPage} from './admin/pages/products/AdminProductsPage';
 import {CreateProductPage} from './admin/pages/products/CreateProductPage';
 import {AdminProductPage} from './admin/pages/product/AdminProductPage';
@@ -44,6 +45,10 @@ export const appRouter = createBrowserRouter([
 			{
 				path: 'product/:slug',
 				element: <ProductPage />,
+			},
+			{
+				path: 'about',
+				element: <AboutPage />,
 			},
 		],
 	},
