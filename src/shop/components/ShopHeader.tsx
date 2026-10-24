@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Link, NavLink} from 'react-router';
+import {Link, NavLink, useLocation} from 'react-router';
 import {Menu, ShoppingCart, UserCog, X} from 'lucide-react';
 import {Button, buttonVariants} from '@/components/ui/button';
 import {CustomLogo} from '@/components/custom/CustomLogo';
@@ -30,7 +30,7 @@ const LOGO_DARK = '/gonzalez-logo.png';
 // Pixels of scroll before the header switches to its see through state
 const SCROLL_THRESHOLD = 8;
 // Scrolled look: a light veil of the brand black, so the page shows behind
-const SCROLLED_BACKGROUND = 'rgba(0, 0, 0, 0.12)';
+const SCROLLED_BACKGROUND = 'rgba(0, 0, 0, 0.25)';
 
 // Clases completas, para que Tailwind las detecte
 const positionClasses = {
@@ -88,6 +88,8 @@ export const ShopHeader = ({
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 	const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
+	const {pathname} = useLocation();
+	const isAboutPage = pathname === '/about';
 
 	// The dark logo only shows in the see through state, so load it upfront
 	useEffect(() => {
@@ -110,6 +112,22 @@ export const ShopHeader = ({
 
 	const closeMenu = () => setIsOpen(false);
 
+	const headerBackgroundColor = isAboutPage
+		? isSeeThrough
+			? SCROLLED_BACKGROUND
+			: '#ffffff'
+		: isSeeThrough
+			? SCROLLED_BACKGROUND
+			: backgroundColor;
+	const headerTextColor = isAboutPage ? DARK_INK : isSeeThrough ? DARK_INK : textColor;
+	const logoSrc = isAboutPage
+		? isSeeThrough
+			? LOGO_DARK
+			: LOGO_DARK
+		: isSeeThrough
+			? LOGO_DARK
+			: LOGO_WHITE;
+
 	return (
 		<header className={cn('z-50 px-4', positionClasses[position])}>
 			<div
@@ -123,10 +141,8 @@ export const ShopHeader = ({
 						isSeeThrough ? 'shadow-none' : 'shadow-lg',
 					)}
 					style={{
-						backgroundColor: isSeeThrough
-							? SCROLLED_BACKGROUND
-							: backgroundColor,
-						color: isSeeThrough ? DARK_INK : textColor,
+						backgroundColor: headerBackgroundColor,
+						color: headerTextColor,
 					}}
 				>
 					{/* Logo */}
@@ -137,7 +153,7 @@ export const ShopHeader = ({
 									<span className='hidden lg:inline'>gonzalez Peña</span>
 								</>
 							}
-							logoSrc={isSeeThrough ? LOGO_DARK : LOGO_WHITE}
+							logoSrc={logoSrc}
 							subtitleClassName='text-inherit opacity-70'
 							onClick={closeMenu}
 						/>
@@ -192,7 +208,7 @@ export const ShopHeader = ({
 				{isOpen && (
 					<nav
 						className='absolute items-center inset-x-0 top-full mt-2 flex flex-col gap-0 rounded-3xl p-3 shadow-lg md:hidden'
-						style={{backgroundColor, color: textColor}}
+						style={{backgroundColor: headerBackgroundColor, color: headerTextColor}}
 					>
 						{navItems.map((item) => (
 							<NavItemLink

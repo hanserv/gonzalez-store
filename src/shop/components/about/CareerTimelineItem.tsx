@@ -14,21 +14,21 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 		<div className='relative grid grid-cols-1 items-center gap-8 py-12 md:gap-12 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center lg:gap-0 lg:py-24'>
 			{/* Línea central y nodo (solo escritorio) */}
 			<div
-				className='absolute left-6 top-0 hidden h-full w-px -translate-x-1/2 bg-slate-300 lg:left-1/2 lg:block'
+				className='absolute left-6 top-0 hidden h-full w-px -translate-x-1/2 bg-white/20 lg:left-1/2 lg:block'
 				aria-hidden='true'
 			/>
 			<div
-				className='absolute left-6 top-1/2 hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#111827] lg:left-1/2 lg:block'
+				className='absolute left-6 top-1/2 hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gonzalez-red lg:left-1/2 lg:block'
 				aria-hidden='true'
 			/>
 
 			{/* Línea lateral y nodo (móvil/tablet) */}
 			<div
-				className='absolute left-6 top-0 h-full w-px -translate-x-1/2 bg-slate-300 lg:hidden'
+				className='absolute left-6 top-0 h-full w-px -translate-x-1/2 bg-white/20 lg:hidden'
 				aria-hidden='true'
 			/>
 			<div
-				className='absolute left-6 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#111827] lg:hidden'
+				className='absolute left-6 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gonzalez-red lg:hidden'
 				aria-hidden='true'
 			/>
 
@@ -43,17 +43,17 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 			>
 				<div
 					className={cn(
-						'w-full max-w-md rounded-lg bg-black/15 p-6 backdrop-blur-sm',
+						'w-full max-w-md rounded-lg bg-black p-6 backdrop-blur-sm',
 						isImageRight ? 'lg:text-right' : 'lg:text-left',
 					)}
 				>
 					<div
 						className={cn(
-							'mb-3 flex items-center gap-3 text-sm text-slate-700',
+							'mb-3 flex items-center gap-3 text-sm',
 							isImageRight ? 'lg:justify-end' : 'lg:justify-start',
 						)}
 					>
-						<span className='tabular-nums text-gonzalez-red '>
+						<span className='tabular-nums text-gonzalez-red'>
 							{stage.period}
 						</span>
 						{stage.tags?.length ? (
@@ -61,7 +61,7 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 								{stage.tags.map((tag) => (
 									<span
 										key={tag}
-										className='rounded-full border border-slate-300/60 px-2 py-0.5 text-xs text-slate-700'
+										className='rounded-full border border-white/30 px-2 py-0.5 text-xs text-gray-200'
 									>
 										{tag}
 									</span>
@@ -69,10 +69,10 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 							</span>
 						) : null}
 					</div>
-					<h3 className='mb-4 text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl lg:text-3xl'>
+					<h3 className='mb-4 text-xl font-semibold font-cinzel tracking-tight text-white sm:text-2xl lg:text-3xl'>
 						{stage.title}
 					</h3>
-					<p className='text-base leading-relaxed text-slate-700'>
+					<p className='text-base leading-relaxed text-gray-200'>
 						{stage.description}
 					</p>
 				</div>
