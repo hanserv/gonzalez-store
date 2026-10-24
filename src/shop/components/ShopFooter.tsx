@@ -18,7 +18,7 @@ export const ShopFooter = () => {
 				<div className='grid gap-10 md:grid-cols-[1.5fr_auto_auto] md:gap-16'>
 					{/* Brand */}
 					<div>
-						<CustomLogo title='gonzalez Peña' logoSrc='/gonzalez-logo-white.png' />
+						<CustomLogo title='Gonzalez Peña' logoSrc='/gonzalez-logo-white.png' />
 						<div className='mt-4 h-1 w-12 bg-gonzalez-red' />
 						<p className='mt-4 max-w-xs text-sm font-semibold uppercase leading-relaxed tracking-wide text-white/80'>
 							Pasos pequeños. Huellas gigantes.
@@ -72,9 +72,8 @@ export const ShopFooter = () => {
 				{/* Bottom bar */}
 				<div className='mt-12 flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row'>
 					<p>
-						© {CURRENT_YEAR} gonzalez Peña. Todos los derechos reservados.
+						© {CURRENT_YEAR} Gonzalez Peña. Todos los derechos reservados.
 					</p>
-					<p>Tenis y ropa</p>
 				</div>
 			</div>
 		</footer>
