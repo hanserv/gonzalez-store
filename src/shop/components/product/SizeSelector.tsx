@@ -7,14 +7,10 @@ interface SizeSelectorProps {
 	onSelect: (size: string) => void;
 }
 
-export const SizeSelector = ({
-	sizes,
-	selectedSize,
-	onSelect,
-}: SizeSelectorProps) => {
+export const SizeSelector = ({sizes, selectedSize, onSelect}: SizeSelectorProps) => {
 	if (sizes.length === 0) {
 		return (
-			<p className='rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-600'>
+			<p className='rounded-xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-3 text-sm text-[#6B7280]'>
 				Este producto no tiene tallas disponibles.
 			</p>
 		);
@@ -34,12 +30,12 @@ export const SizeSelector = ({
 						onClick={() => onSelect(size.size)}
 						aria-pressed={isSelected}
 						className={cn(
-							'min-w-14 rounded-lg border px-3 py-2 text-sm font-medium transition-colors',
+							'h-9 min-w-[44px] rounded-full px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111418]',
 							isOutOfStock
-								? 'cursor-not-allowed border-neutral-200 text-neutral-300 line-through'
+								? 'cursor-not-allowed bg-[#F1F3F5] text-[#9CA3AF] line-through'
 								: isSelected
-									? 'border-neutral-900 bg-neutral-900 text-white'
-									: 'border-neutral-300 text-neutral-900 hover:border-neutral-900',
+									? 'bg-[#111418] text-white'
+									: 'bg-[#F1F3F5] text-[#111418] hover:bg-[#E9ECEF]',
 						)}
 					>
 						{size.size}

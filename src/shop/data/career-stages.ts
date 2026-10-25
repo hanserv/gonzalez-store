@@ -55,7 +55,7 @@ export const careerStages: CareerStage[] = [
 	{
 		id: 'cambio',
 		period: 'El cambio',
-		title: 'de Gonzalez Sport a Gonzalez Peña.',
+		title: 'de gonzalez sport a gonzalez peña.',
 		description:
 			'A lo largo de nuestro camino, las adversidades fueron creciendo, al igual que nuestra visión. Hoy, González Sport es parte de la historia que me condujo hasta aquí, mientras que González Peña es una historia que apenas comienza.',
 		image: '/about-me-06.jpeg',
