@@ -199,8 +199,8 @@ export const StorePage = () => {
 			<div className='mx-auto max-w-6xl px-6'>
 				<header className='mb-6 flex items-end justify-between gap-4'>
 					<div>
-						<h1 className='text-3xl font-bold text-neutral-950 md:text-4xl'>
-							Tienda
+						<h1 className='text-3xl font-bold font-cinzel text-neutral-950 md:text-4xl'>
+							tienda
 						</h1>
 						<div className='mt-2 h-1 w-12 bg-gonzalez-red' />
 					</div>
