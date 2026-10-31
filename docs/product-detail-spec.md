@@ -468,6 +468,12 @@ productos tienen talla, color u otras variantes.
   botón cuando corresponda.
 - No crear un segundo sistema de carrito ni cambiar la lógica de
   negocio para adaptarla al diseño.
+- Implementación actual: el botón valida la talla, guarda la variante y
+  la talla en el carrito del cliente (`useCartStore`), muestra un toast
+  con la acción «Ver carrito» y no abre el aside automáticamente. Si la
+  variante tiene tallas y todas están en stock 0, se muestra como
+  «Agotado» y deshabilitado. El detalle del carrito vive en
+  `docs/cart-spec.md`.
 
 ## 8. Franja de confianza
 

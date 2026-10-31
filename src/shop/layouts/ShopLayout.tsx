@@ -1,6 +1,7 @@
 import {Outlet, ScrollRestoration, useLocation} from 'react-router';
 import {ShopHeader} from '../components/ShopHeader';
 import {ShopFooter} from '../components/ShopFooter';
+import {CartSheet} from '../components/cart/CartSheet';
 
 export const ShopLayout = () => {
 	const {pathname} = useLocation();
@@ -16,6 +17,7 @@ export const ShopLayout = () => {
 				position='fixed'
 			/>
 			<Outlet />
+			<CartSheet />
 			{showFooter && <ShopFooter />}
 		</>
 	);
