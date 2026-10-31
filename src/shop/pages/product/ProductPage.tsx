@@ -1,10 +1,12 @@
 import {useState} from 'react';
 import {Link, useParams} from 'react-router';
-import {ArrowLeft, ShoppingCart, ShieldCheck, Truck} from 'lucide-react';
+import {ArrowLeft, ShoppingBag, ShoppingCart, ShieldCheck, Truck} from 'lucide-react';
+import {toast} from 'sonner';
 import {Button} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';
 import {useVariantBySlug} from '@/shop/hooks/variants/useVariantBySlug';
 import {formatCurrency} from '@/shop/lib/format';
+import {useCartStore} from '@/shop/stores/cart.store';
 import {ProductGallery} from '@/shop/components/product/ProductGallery';
 import {SiblingVariants} from '@/shop/components/product/SiblingVariants';
 import {SizeSelector} from '@/shop/components/product/SizeSelector';
@@ -31,6 +33,9 @@ const ProductSkeleton = () => (
 export const ProductPage = () => {
 	const {slug} = useParams();
 	const {data, isLoading, isError, refetch} = useVariantBySlug(slug);
+	const addItem = useCartStore((state) => state.addItem);
+	const openCart = useCartStore((state) => state.openCart);
+	const items = useCartStore((state) => state.items);
 	const [selectedSize, setSelectedSize] = useState<string | null>(null);
 	const [sizeError, setSizeError] = useState<string | null>(null);
 
@@ -69,14 +74,63 @@ export const ProductPage = () => {
 	const {variant, siblings} = data;
 	const hasDiscount = variant.discountPercentage > 0;
 	const hasSizes = variant.sizes.length > 0;
+	const isSoldOut =
+		hasSizes && variant.sizes.every((size) => size.stock <= 0);
+	// A size from a previous variant can survive navigation, so only keep it
+	// when the current variant actually offers it
+	const activeSize =
+		hasSizes &&
+		selectedSize &&
+		variant.sizes.some((size) => size.size === selectedSize)
+			? selectedSize
+			: null;
+
+	const isInCart = hasSizes
+		? activeSize !== null && items.some((item) => item.variantId === variant.id && item.size === activeSize)
+		: items.some((item) => item.variantId === variant.id && item.size === null);
 
 	const handleAddToCart = () => {
-		if (hasSizes && !selectedSize) {
+		if (isInCart) {
+			openCart();
+			return;
+		}
+
+		if (hasSizes && !activeSize) {
 			setSizeError('Selecciona una talla para continuar.');
 			return;
 		}
 
 		setSizeError(null);
+
+		const stockLimit = activeSize
+			? (variant.sizes.find((size) => size.size === activeSize)?.stock ??
+				null)
+			: null;
+
+		const result = addItem({
+			variantId: variant.id,
+			size: hasSizes ? activeSize : null,
+			slug: variant.slug,
+			title: variant.title,
+			brandName: variant.brandName,
+			imageUrl: variant.images[0]?.url ?? null,
+			price: variant.price,
+			finalPrice: variant.finalPrice,
+			quantity: 1,
+			stockLimit,
+		});
+
+		if (!result.added) {
+			toast.info('No hay más unidades disponibles de esta talla.');
+			return;
+		}
+
+		toast.success('Agregado al carrito', {
+			description: result.clamped
+				? `Ajustamos la cantidad a ${result.quantity} por disponibilidad.`
+				: undefined,
+			action: {label: 'Ver carrito', onClick: openCart},
+		});
 	};
 
 	return (
@@ -147,7 +201,7 @@ export const ProductPage = () => {
 										<p className='text-sm font-medium text-[#111418]'>Talla</p>
 										<SizeSelector
 											sizes={variant.sizes}
-											selectedSize={selectedSize}
+											selectedSize={activeSize}
 											onSelect={(size) => {
 												setSelectedSize(size);
 												setSizeError(null);
@@ -161,11 +215,16 @@ export const ProductPage = () => {
 
 								<Button
 									type='button'
+									disabled={isSoldOut}
 									className='mt-2 h-12 w-full rounded-full bg-[#111418] text-white hover:bg-[#1F2328]'
 									onClick={handleAddToCart}
 								>
-									<ShoppingCart className='size-4' />
-									Agregar al carrito
+									{isInCart ? (
+										<ShoppingBag className='size-4' />
+									) : (
+										<ShoppingCart className='size-4' />
+									)}
+									{isSoldOut ? 'Agotado' : isInCart ? 'Ir al carrito' : 'Agregar al carrito'}
 								</Button>
 
 								<div className='grid grid-cols-2 gap-2'>
