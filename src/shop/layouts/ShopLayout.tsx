@@ -1,4 +1,4 @@
-import {Outlet, useLocation} from 'react-router';
+import {Outlet, ScrollRestoration, useLocation} from 'react-router';
 import {ShopHeader} from '../components/ShopHeader';
 import {ShopFooter} from '../components/ShopFooter';
 
@@ -10,6 +10,7 @@ export const ShopLayout = () => {
 
 	return (
 		<>
+			<ScrollRestoration />
 			<ShopHeader
 				backgroundColor={isAboutPage ? '#ffffff' : '#000000'}
 				textColor={isAboutPage ? '#111827' : '#ffffff'}
