@@ -136,7 +136,10 @@ export const ProductPage = () => {
 									<p className='mb-2 text-sm font-medium text-[#111418]'>
 										Color: {variant.title}
 									</p>
-									<SiblingVariants currentVariantId={variant.id} siblings={siblings} />
+									<SiblingVariants
+										currentVariantId={variant.id}
+										siblings={siblings}
+									/>
 								</div>
 
 								{hasSizes && (
@@ -169,15 +172,23 @@ export const ProductPage = () => {
 									<div className='flex items-center gap-2 rounded-2xl bg-[#F7F8FA] px-3 py-2'>
 										<Truck className='size-4 text-[#6B7280]' />
 										<div className='flex flex-col'>
-											<span className='text-xs font-medium text-[#111418]'>Envío disponible</span>
-											<span className='text-[11px] text-[#6B7280]'>Rápido y seguro</span>
+											<span className='text-xs font-medium text-[#111418]'>
+												Envío disponible
+											</span>
+											<span className='text-[11px] text-[#6B7280]'>
+												Rápido y seguro
+											</span>
 										</div>
 									</div>
 									<div className='flex items-center gap-2 rounded-2xl bg-[#F7F8FA] px-3 py-2'>
 										<ShieldCheck className='size-4 text-[#6B7280]' />
 										<div className='flex flex-col'>
-											<span className='text-xs font-medium text-[#111418]'>Compras seguras</span>
-											<span className='text-[11px] text-[#6B7280]'>100% protegido</span>
+											<span className='text-xs font-medium text-[#111418]'>
+												Compras seguras
+											</span>
+											<span className='text-[11px] text-[#6B7280]'>
+												100% protegido
+											</span>
 										</div>
 									</div>
 								</div>
@@ -185,18 +196,7 @@ export const ProductPage = () => {
 						</div>
 					</div>
 				</div>
-
-				<div className='mt-6 flex flex-col gap-4 md:hidden'>
-					{variant.description && (
-						<div>
-							<p className='text-sm leading-relaxed text-[#6B7280] whitespace-pre-line'>
-								{variant.description}
-							</p>
-						</div>
-					)}
-				</div>
 			</div>
 		</section>
 	);
 };
-
