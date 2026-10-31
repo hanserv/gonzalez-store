@@ -14,7 +14,7 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 		<div className='relative grid grid-cols-1 items-center gap-8 py-12 md:gap-12 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center lg:gap-0 lg:py-24'>
 			{/* Línea central y nodo (solo escritorio) */}
 			<div
-				className='absolute left-6 top-0 hidden h-full w-px -translate-x-1/2 bg-white/20 lg:left-1/2 lg:block'
+				className='absolute left-6 top-0 hidden h-full w-px -translate-x-1/2 bg-foreground/10 lg:left-1/2 lg:block'
 				aria-hidden='true'
 			/>
 			<div
@@ -24,7 +24,7 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 
 			{/* Línea lateral y nodo (móvil/tablet) */}
 			<div
-				className='absolute left-6 top-0 h-full w-px -translate-x-1/2 bg-white/20 lg:hidden'
+				className='absolute left-6 top-0 h-full w-px -translate-x-1/2 bg-foreground/10 lg:hidden'
 				aria-hidden='true'
 			/>
 			<div
@@ -43,7 +43,7 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 			>
 				<div
 					className={cn(
-						'w-full max-w-md rounded-lg bg-black p-6 backdrop-blur-sm',
+						'w-full max-w-md rounded-lg bg-white p-6 shadow-xs ring-1 ring-foreground/10',
 						isImageRight ? 'lg:text-right' : 'lg:text-left',
 					)}
 				>
@@ -61,7 +61,7 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 								{stage.tags.map((tag) => (
 									<span
 										key={tag}
-										className='rounded-full border border-white/30 px-2 py-0.5 text-xs text-gray-200'
+										className='rounded-full border border-foreground/15 px-2 py-0.5 text-xs text-neutral-600'
 									>
 										{tag}
 									</span>
@@ -69,10 +69,10 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 							</span>
 						) : null}
 					</div>
-					<h3 className='mb-4 text-xl font-semibold font-cinzel tracking-tight text-white sm:text-2xl lg:text-3xl'>
+					<h3 className='mb-4 text-xl font-semibold font-cinzel tracking-tight text-neutral-900 sm:text-2xl lg:text-3xl'>
 						{stage.title}
 					</h3>
-					<p className='text-base leading-relaxed text-gray-200'>
+					<p className='text-base leading-relaxed text-neutral-600'>
 						{stage.description}
 					</p>
 				</div>
@@ -87,7 +87,7 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 						: 'lg:col-start-1 lg:justify-self-end lg:pr-6',
 				)}
 			>
-				<div className='w-full max-w-[400px] overflow-hidden rounded-xl'>
+				<div className='w-full max-w-[400px] overflow-hidden rounded-xl ring-1 ring-foreground/10'>
 					<div className='aspect-[4/3] w-full'>
 						<img
 							src={stage.image}

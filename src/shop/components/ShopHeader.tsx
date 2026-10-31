@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Link, NavLink, useLocation} from 'react-router';
+import {Link, NavLink} from 'react-router';
 import {Menu, ShoppingCart, UserCog, X} from 'lucide-react';
 import {Button, buttonVariants} from '@/components/ui/button';
 import {CustomLogo} from '@/components/custom/CustomLogo';
@@ -88,8 +88,6 @@ export const ShopHeader = ({
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 	const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
-	const {pathname} = useLocation();
-	const isAboutPage = pathname === '/about';
 
 	// The dark logo only shows in the see through state, so load it upfront
 	useEffect(() => {
@@ -112,21 +110,11 @@ export const ShopHeader = ({
 
 	const closeMenu = () => setIsOpen(false);
 
-	const headerBackgroundColor = isAboutPage
-		? isSeeThrough
-			? SCROLLED_BACKGROUND
-			: '#ffffff'
-		: isSeeThrough
-			? SCROLLED_BACKGROUND
-			: backgroundColor;
-	const headerTextColor = isAboutPage ? DARK_INK : isSeeThrough ? DARK_INK : textColor;
-	const logoSrc = isAboutPage
-		? isSeeThrough
-			? LOGO_DARK
-			: LOGO_DARK
-		: isSeeThrough
-			? LOGO_DARK
-			: LOGO_WHITE;
+	const headerBackgroundColor = isSeeThrough
+		? SCROLLED_BACKGROUND
+		: backgroundColor;
+	const headerTextColor = isSeeThrough ? DARK_INK : textColor;
+	const logoSrc = isSeeThrough ? LOGO_DARK : LOGO_WHITE;
 
 	return (
 		<header className={cn('z-50 px-4', positionClasses[position])}>
