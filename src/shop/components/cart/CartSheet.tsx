@@ -57,6 +57,8 @@ export const CartSheet = () => {
 				side='right'
 				className='w-full! gap-0 sm:max-w-md!'
 				overlayClassName='bg-black/40 supports-backdrop-filter:backdrop-blur-md'
+				lang='es'
+				translate='no'
 			>
 				<SheetHeader className='border-b border-neutral-100'>
 					<SheetTitle className='text-lg'>Tu carrito</SheetTitle>
@@ -126,8 +128,8 @@ export const CartSheet = () => {
 
 						{isError && (
 							<p className='text-center text-xs text-neutral-500'>
-								No pudimos verificar la disponibilidad. Puedes continuar
-								con tu pedido.
+								No pudimos verificar la disponibilidad. Puedes continuar con tu
+								pedido.
 							</p>
 						)}
 					</SheetFooter>
