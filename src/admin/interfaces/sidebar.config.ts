@@ -1,4 +1,4 @@
-import {Crown, Home, ShoppingBag, Tags} from 'lucide-react';
+import {Crown, Home, MapPin, ShoppingBag, Tags} from 'lucide-react';
 import type {LucideIcon} from 'lucide-react';
 
 export interface MenuItem {
@@ -13,4 +13,5 @@ export const menuItems: MenuItem[] = [
 	{icon: Tags, label: 'Categorías', to: '/admin/categories'},
 	{icon: Crown, label: 'Marcas', to: '/admin/brands'},
 	{icon: ShoppingBag, label: 'Productos', to: '/admin/products'},
+	{icon: MapPin, label: 'Ventas por provincia', to: '/admin/sales'},
 ];
