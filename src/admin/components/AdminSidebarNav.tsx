@@ -57,6 +57,8 @@ export const AdminSidebarNav = ({
 				onClick={onNavigate}
 				title={isCollapsed ? 'Ir a la tienda' : undefined}
 				aria-label='Ir a la tienda'
+				lang='es'
+				translate='no'
 				className={cn(
 					buttonVariants({variant: 'outline', size: 'sm'}),
 					'group w-full rounded-full border-current/30  text-black ',
