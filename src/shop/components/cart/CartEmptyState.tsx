@@ -7,7 +7,11 @@ interface CartEmptyStateProps {
 }
 
 export const CartEmptyState = ({onNavigate}: CartEmptyStateProps) => (
-	<div className='flex flex-1 flex-col items-center justify-center gap-3 px-6 py-16 text-center'>
+	<div
+		className='flex flex-1 flex-col items-center justify-center gap-3 px-6 py-16 text-center'
+		lang='es'
+		translate='no'
+	>
 		<div className='grid size-14 place-items-center rounded-full bg-neutral-100'>
 			<ShoppingBag className='size-6 text-neutral-400' />
 		</div>

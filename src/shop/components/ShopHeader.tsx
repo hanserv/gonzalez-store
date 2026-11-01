@@ -120,7 +120,11 @@ export const ShopHeader = ({
 	const logoSrc = isSeeThrough ? LOGO_DARK : LOGO_WHITE;
 
 	return (
-		<header className={cn('z-50 px-4', positionClasses[position])}>
+		<header
+			className={cn('z-50 px-4', positionClasses[position])}
+			lang='es'
+			translate='no'
+		>
 			<div
 				className='relative mx-auto max-w-5xl'
 				onMouseEnter={() => setIsHovered(true)}
@@ -211,7 +215,10 @@ export const ShopHeader = ({
 				{isOpen && (
 					<nav
 						className='absolute items-center inset-x-0 top-full mt-2 flex flex-col gap-0 rounded-3xl p-3 shadow-lg md:hidden'
-						style={{backgroundColor: headerBackgroundColor, color: headerTextColor}}
+						style={{
+							backgroundColor: headerBackgroundColor,
+							color: headerTextColor,
+						}}
 					>
 						{navItems.map((item) => (
 							<NavItemLink
