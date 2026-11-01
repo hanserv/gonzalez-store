@@ -5,7 +5,7 @@ Fuente de verdad para las estadísticas del dashboard del admin. Si algo de aqu�
 ## Principios
 
 - Solo datos reales. La única excepción temporal es "Productos más vistos" (ver Deuda técnica).
-- No hay estadísticas de ventas. Los pedidos van por WhatsApp y no hay forma de saber si el admin concretó la venta, así que cualquier cifra sería inventada.
+- No hay estadísticas de ventas. Los pedidos van por WhatsApp y no hay forma de saber si el admin concretó la venta, así que cualquier cifra sería inventada. El mapa de ventas por provincia no contradice esta regla: usa totales cargados manualmente, no pedidos. Ver `docs/province-sales-map.spec.md`.
 - Las cifras se calculan en la base de datos. Nunca se traen listas al navegador para contarlas.
 - Las dos consultas del dashboard son independientes: cada una tiene su propia carga y su propio error.
 

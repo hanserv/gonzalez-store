@@ -5,7 +5,8 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 ## Documentos de referencia
 
 - Antes de trabajar en productos, variantes, imágenes, tallas o stock, lee `docs/products-spec.md`. Es la fuente de verdad de ese módulo: modelo de datos, reglas de negocio, pantallas del admin, comportamiento de la tienda y plan por etapas.
-- Si una tarea contradice ese documento, detente y avisa en vez de improvisar. Si cambias algo del módulo, actualiza el documento en el mismo cambio.
+- Antes de trabajar en el carrito o el checkout, lee `docs/cart-spec.md`. Es la fuente de verdad del carrito en el cliente, la revalidación de precio y stock, el aside y el pedido por WhatsApp.
+- Si una tarea contradice esos documentos, detente y avisa en vez de improvisar. Si cambias algo del módulo, actualiza el documento en el mismo cambio.
 
 ## Stack
 
@@ -14,7 +15,7 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 - TanStack React Query para datos remotos, caché e invalidaciones.
 - Supabase para autenticación, base de datos y Storage, con tipos generados.
 - React Hook Form + Zod para formularios y validación.
-- Zustand para estado global ligero (sesión de auth).
+- Zustand para estado global ligero (sesión de auth y carrito).
 - Tailwind CSS v4, shadcn/ui (componentes base en `src/components/ui`) e iconos de `lucide-react`.
 - Sonner para notificaciones.
 - El alias `@` apunta a `src/`.
@@ -158,7 +159,8 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 - Productos: Etapa 1 (productos), Etapa 2 (variantes con tallas), Etapa 3 (imágenes), ajuste "producto popular", ajuste de borrado de variantes y ajuste de borrado de productos terminados. En progreso: módulo de productos, por etapas (ver el plan y los checkboxes en `docs/products-spec.md`).
 - Dashboard: datos reales (stats por RPC `get_dashboard_stats`, últimas variantes y productos más vistos), sin mocks. Falta D6, el registro de interés (ver `docs/dashboard-spec.md`).
 - Tienda (Etapa 5) terminada: catálogo en `/store` con card por producto, panel "Filtrar y ordenar" (aside derecho con orden por precio/nombre, búsqueda, marca, categoría, slider de precio, solo ofertas y solo populares) y página de variante en `product/:slug` con carrusel. Código en `src/shop/`.
-- Después: panel rápido de stock (Etapa 4, aplazada), registro de interés del dashboard (D6) y carrito y checkout (Etapa 6).
+- Carrito (Etapa 6) terminado: carrito en el cliente con Zustand y `localStorage`, aside derecho reutilizando `Sheet`, revalidación de precio y stock al abrir, insignia en el header, botón "Agregar al carrito" en la página de variante y checkout por WhatsApp. Ver `docs/cart-spec.md`.
+- Después: panel rápido de stock (Etapa 4, aplazada) y registro de interés del dashboard (D6).
   Actualiza esta sección al terminar cada etapa.
 
 ## Deuda técnica (refactor final)

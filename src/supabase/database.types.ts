@@ -151,6 +151,72 @@ export type Database = {
           },
         ]
       }
+      province_sales_entries: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: number
+          note: string | null
+          province_id: number
+          quantity: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: never
+          note?: string | null
+          province_id: number
+          quantity: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: never
+          note?: string | null
+          province_id?: number
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "province_sales_entries_province_id_fkey"
+            columns: ["province_id"]
+            isOneToOne: false
+            referencedRelation: "province_sales_summary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "province_sales_entries_province_id_fkey"
+            columns: ["province_id"]
+            isOneToOne: false
+            referencedRelation: "provinces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provinces: {
+        Row: {
+          id: number
+          lat: number
+          lng: number
+          name: string
+          slug: string
+        }
+        Insert: {
+          id?: never
+          lat: number
+          lng: number
+          name: string
+          slug: string
+        }
+        Update: {
+          id?: never
+          lat?: number
+          lng?: number
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
       variant_images: {
         Row: {
           created_at: string
@@ -217,7 +283,17 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      province_sales_summary: {
+        Row: {
+          id: number | null
+          lat: number | null
+          lng: number | null
+          name: string | null
+          slug: string | null
+          total_sales: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_dashboard_stats: {

@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
-import {Link, NavLink, useLocation} from 'react-router';
+import {Link, NavLink} from 'react-router';
 import {Menu, ShoppingCart, UserCog, X} from 'lucide-react';
 import {Button, buttonVariants} from '@/components/ui/button';
 import {CustomLogo} from '@/components/custom/CustomLogo';
 import {useAuthStore} from '@/auth/stores/auth.store';
+import {selectCartCount, useCartStore} from '@/shop/stores/cart.store';
 import {cn} from '@/lib/utils';
 
 interface ShopHeaderProps {
@@ -88,8 +89,8 @@ export const ShopHeader = ({
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 	const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
-	const {pathname} = useLocation();
-	const isAboutPage = pathname === '/about';
+	const cartCount = useCartStore(selectCartCount);
+	const openCart = useCartStore((state) => state.openCart);
 
 	// The dark logo only shows in the see through state, so load it upfront
 	useEffect(() => {
@@ -112,21 +113,11 @@ export const ShopHeader = ({
 
 	const closeMenu = () => setIsOpen(false);
 
-	const headerBackgroundColor = isAboutPage
-		? isSeeThrough
-			? SCROLLED_BACKGROUND
-			: '#ffffff'
-		: isSeeThrough
-			? SCROLLED_BACKGROUND
-			: backgroundColor;
-	const headerTextColor = isAboutPage ? DARK_INK : isSeeThrough ? DARK_INK : textColor;
-	const logoSrc = isAboutPage
-		? isSeeThrough
-			? LOGO_DARK
-			: LOGO_DARK
-		: isSeeThrough
-			? LOGO_DARK
-			: LOGO_WHITE;
+	const headerBackgroundColor = isSeeThrough
+		? SCROLLED_BACKGROUND
+		: backgroundColor;
+	const headerTextColor = isSeeThrough ? DARK_INK : textColor;
+	const logoSrc = isSeeThrough ? LOGO_DARK : LOGO_WHITE;
 
 	return (
 		<header className={cn('z-50 px-4', positionClasses[position])}>
@@ -181,15 +172,27 @@ export const ShopHeader = ({
 							</Link>
 						)}
 
-						{/* Solo estético por ahora */}
+						{/* Carrito */}
 						<Button
 							type='button'
 							variant='ghost'
 							size='icon'
-							aria-label='Carrito'
-							className='rounded-full text-inherit hover:bg-black/5 hover:text-inherit'
+							aria-label={
+								cartCount > 0
+									? `Abrir carrito, ${cartCount} ${
+											cartCount === 1 ? 'artículo' : 'artículos'
+										}`
+									: 'Abrir carrito'
+							}
+							onClick={openCart}
+							className='relative rounded-full text-inherit hover:bg-black/5 hover:text-inherit'
 						>
 							<ShoppingCart className='size-5' />
+							{cartCount > 0 && (
+								<span className='absolute -top-0.5 -right-0.5 grid min-w-4 place-items-center rounded-full bg-gonzalez-red px-1 text-[10px] leading-4 font-semibold text-white'>
+									{cartCount > 99 ? '99+' : cartCount}
+								</span>
+							)}
 						</Button>
 
 						<button
