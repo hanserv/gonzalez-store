@@ -10,23 +10,28 @@ import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 export const GonzalezApp = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<Suspense
-				fallback={
-					<div className='flex h-screen flex-col items-center justify-center'>
-						<img
-							src='/gonzalez-logo.png'
-							alt='Gonzalez logo'
-							className='h-16 w-auto object-contain'
-						/>
-						<h2 className='font-montserrat font-bold mt-1'>Cargando...</h2>
-					</div>
-				}
-			>
-				<RouterProvider router={appRouter} />
-			</Suspense>
+			<div lang='es' translate='no'>
+				<Suspense
+					fallback={
+						<div className='flex h-screen flex-col items-center justify-center'>
+							<img
+								src='/gonzalez-logo.png'
+								alt='Gonzalez logo'
+								className='h-16 w-auto object-contain'
+							/>
+							<h2 className='mt-1 font-montserrat font-bold'>Cargando...</h2>
+						</div>
+					}
+				>
+					<RouterProvider router={appRouter} />
+				</Suspense>
 
-			<Toaster />
-			<ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-right' />
+				<Toaster />
+				<ReactQueryDevtools
+					initialIsOpen={false}
+					buttonPosition='bottom-right'
+				/>
+			</div>
 		</QueryClientProvider>
 	);
 };

@@ -35,6 +35,7 @@ export const AddProvinceSalesForm = () => {
 		register,
 		handleSubmit,
 		setError,
+		clearErrors,
 		reset,
 		formState: {errors},
 	} = useForm<AddProvinceSalesFormInput, unknown, AddProvinceSalesFormValues>({
@@ -46,6 +47,12 @@ export const AddProvinceSalesForm = () => {
 	const selectedProvince = sortedProvinces.find(
 		(province) => province.id === Number(provinceId),
 	);
+
+	const handleQuantityChange = () => {
+		if (errors.quantity) {
+			clearErrors('quantity');
+		}
+	};
 
 	const onSubmit = (values: AddProvinceSalesFormValues) => {
 		if (addProvinceSales.isPending) return;
@@ -76,6 +83,7 @@ export const AddProvinceSalesForm = () => {
 						quantity: '',
 						note: '',
 					});
+					clearErrors();
 				},
 			},
 		);
@@ -120,7 +128,9 @@ export const AddProvinceSalesForm = () => {
 					disabled={isLoading || isError || addProvinceSales.isPending}
 					placeholder='5'
 					aria-invalid={!!errors.quantity}
-					{...register('quantity')}
+					{...register('quantity', {
+						onChange: handleQuantityChange,
+					})}
 				/>
 				{errors.quantity ? (
 					<p className='text-sm text-destructive'>{errors.quantity.message}</p>
