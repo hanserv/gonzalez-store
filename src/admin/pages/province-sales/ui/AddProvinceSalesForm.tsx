@@ -61,7 +61,8 @@ export const AddProvinceSalesForm = () => {
 
 		const {provinceId, quantity, note} = values;
 		const currentTotal =
-			sortedProvinces.find((province) => province.id === provinceId)?.totalSales ?? 0;
+			sortedProvinces.find((province) => province.id === provinceId)
+				?.totalSales ?? 0;
 
 		if (quantity < 0 && currentTotal + quantity < 0) {
 			setError('quantity', {
@@ -84,7 +85,10 @@ export const AddProvinceSalesForm = () => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<fieldset disabled={isBusy} className='m-0 min-w-0 space-y-5 border-0 p-0'>
+			<fieldset
+				disabled={isBusy}
+				className='m-0 min-w-0 space-y-5 border-0 p-0'
+			>
 				<div className='grid gap-2'>
 					<Label htmlFor='provinceId'>Provincia</Label>
 					<select
@@ -125,7 +129,9 @@ export const AddProvinceSalesForm = () => {
 						})}
 					/>
 					{errors.quantity ? (
-						<p className='text-sm text-destructive'>{errors.quantity.message}</p>
+						<p className='text-sm text-destructive'>
+							{errors.quantity.message}
+						</p>
 					) : (
 						<p className='text-xs text-muted-foreground'>
 							Usa un número negativo para corregir un error.
