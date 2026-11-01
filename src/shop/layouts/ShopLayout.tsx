@@ -5,7 +5,7 @@ import {CartSheet} from '../components/cart/CartSheet';
 
 export const ShopLayout = () => {
 	const {pathname} = useLocation();
-	// The home page is only the full screen hero, the footer starts on the store
+	// The home page ends with the sales section; the footer starts on the store
 	const showFooter = pathname !== '/';
 
 	return (
