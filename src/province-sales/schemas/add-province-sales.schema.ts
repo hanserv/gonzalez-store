@@ -5,10 +5,19 @@ export const addProvinceSalesSchema = z.object({
 		.number('Selecciona una provincia.')
 		.int('La provincia es inválida.')
 		.positive('Selecciona una provincia.'),
-	quantity: z.coerce
-		.number('La cantidad debe ser un número.')
-		.int('La cantidad debe ser un número entero.')
-		.refine((value) => value !== 0, 'La cantidad no puede ser 0.'),
+	quantity: z.preprocess(
+		(value) => {
+			if (value === '' || value === null || value === undefined) {
+				return undefined;
+			}
+
+			return typeof value === 'string' ? value.trim() : value;
+		},
+		z.coerce
+			.number('La cantidad debe ser un número.')
+			.int('La cantidad debe ser un número entero.')
+			.refine((value) => value !== 0, 'La cantidad no puede ser 0.'),
+	),
 	note: z
 		.string()
 		.trim()

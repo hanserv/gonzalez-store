@@ -2,6 +2,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {Loader2} from 'lucide-react';
 import {useMemo} from 'react';
 import {useForm, useWatch} from 'react-hook-form';
+
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
@@ -35,7 +36,8 @@ export const AddProvinceSalesForm = () => {
 		register,
 		handleSubmit,
 		setError,
-		reset,
+		clearErrors,
+		resetField,
 		formState: {errors},
 	} = useForm<AddProvinceSalesFormInput, unknown, AddProvinceSalesFormValues>({
 		resolver: zodResolver(addProvinceSalesSchema),
@@ -46,17 +48,23 @@ export const AddProvinceSalesForm = () => {
 	const selectedProvince = sortedProvinces.find(
 		(province) => province.id === Number(provinceId),
 	);
+	const isBusy = isLoading || isError || addProvinceSales.isPending;
+
+	const handleQuantityChange = () => {
+		if (errors.quantity) {
+			clearErrors('quantity');
+		}
+	};
 
 	const onSubmit = (values: AddProvinceSalesFormValues) => {
 		if (addProvinceSales.isPending) return;
 
-		const selectedValue = sortedProvinces.find(
-			(province) => province.id === values.provinceId,
-		);
-		const currentTotal = selectedValue?.totalSales ?? 0;
-		const nextTotal = currentTotal + values.quantity;
+		const {provinceId, quantity, note} = values;
+		const currentTotal =
+			sortedProvinces.find((province) => province.id === provinceId)
+				?.totalSales ?? 0;
 
-		if (values.quantity < 0 && nextTotal < 0) {
+		if (quantity < 0 && currentTotal + quantity < 0) {
 			setError('quantity', {
 				message: 'El total de la provincia no puede quedar negativo.',
 			});
@@ -64,91 +72,100 @@ export const AddProvinceSalesForm = () => {
 		}
 
 		addProvinceSales.mutate(
-			{
-				provinceId: values.provinceId,
-				quantity: values.quantity,
-				note: values.note,
-			},
+			{provinceId, quantity, note},
 			{
 				onSuccess: () => {
-					reset({
-						provinceId: String(values.provinceId),
-						quantity: '',
-						note: '',
-					});
+					resetField('quantity');
+					resetField('note');
+					clearErrors();
 				},
 			},
 		);
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
-			<div className='grid gap-2'>
-				<Label htmlFor='provinceId'>Provincia</Label>
-				<select
-					id='provinceId'
-					disabled={isLoading || isError || addProvinceSales.isPending}
-					aria-invalid={!!errors.provinceId}
-					className='h-9 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
-					{...register('provinceId')}
-				>
-					<option value=''>{emptyOption}</option>
-					{sortedProvinces.map((province) => (
-						<option key={province.id} value={province.id}>
-							{province.name}
-						</option>
-					))}
-				</select>
-				{selectedProvince && (
-					<p className='text-sm text-muted-foreground'>
-						Total actual: {formatSalesLabel(selectedProvince.totalSales)}
-					</p>
-				)}
-				{errors.provinceId && (
-					<p className='text-sm text-destructive'>
-						{errors.provinceId.message}
-					</p>
-				)}
-			</div>
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<fieldset
+				disabled={isBusy}
+				className='m-0 min-w-0 space-y-5 border-0 p-0'
+			>
+				<div className='grid gap-2'>
+					<Label htmlFor='provinceId'>Provincia</Label>
+					<select
+						id='provinceId'
+						aria-invalid={!!errors.provinceId}
+						className='h-9 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+						{...register('provinceId')}
+					>
+						<option value=''>{emptyOption}</option>
+						{sortedProvinces.map((province) => (
+							<option key={province.id} value={province.id}>
+								{province.name}
+							</option>
+						))}
+					</select>
+					{selectedProvince && (
+						<p className='text-sm text-muted-foreground'>
+							Total actual: {formatSalesLabel(selectedProvince.totalSales)}
+						</p>
+					)}
+					{errors.provinceId && (
+						<p className='text-sm text-destructive'>
+							{errors.provinceId.message}
+						</p>
+					)}
+				</div>
 
-			<div className='grid gap-2'>
-				<Label htmlFor='quantity'>Cantidad</Label>
-				<Input
-					id='quantity'
-					type='number'
-					step='1'
-					disabled={isLoading || isError || addProvinceSales.isPending}
-					placeholder='5'
-					aria-invalid={!!errors.quantity}
-					{...register('quantity')}
-				/>
-				{errors.quantity ? (
-					<p className='text-sm text-destructive'>{errors.quantity.message}</p>
-				) : (
-					<p className='text-xs text-muted-foreground'>
-						Usa un número negativo para corregir un error.
-					</p>
-				)}
-			</div>
+				<div className='grid gap-2'>
+					<Label htmlFor='quantity'>Cantidad</Label>
+					<Input
+						id='quantity'
+						type='number'
+						step='1'
+						placeholder='5'
+						aria-invalid={!!errors.quantity}
+						{...register('quantity', {
+							onChange: handleQuantityChange,
+						})}
+					/>
+					{errors.quantity ? (
+						<p className='text-sm text-destructive'>
+							{errors.quantity.message}
+						</p>
+					) : (
+						<p className='text-xs text-muted-foreground'>
+							Usa un número negativo para corregir un error.
+						</p>
+					)}
+				</div>
 
-			<div className='grid gap-2'>
-				<Label htmlFor='note'>Nota (opcional)</Label>
-				<Textarea
-					id='note'
-					disabled={isLoading || isError || addProvinceSales.isPending}
-					rows={3}
-					placeholder='Ej. Feria en Santiago'
-					maxLength={200}
-					aria-invalid={!!errors.note}
-					{...register('note')}
-				/>
-				{errors.note && (
-					<p className='text-sm text-destructive'>{errors.note.message}</p>
-				)}
-			</div>
+				<div className='grid gap-2'>
+					<Label htmlFor='note'>Nota (opcional)</Label>
+					<Textarea
+						id='note'
+						rows={3}
+						placeholder='Ej. Feria en Santiago'
+						maxLength={200}
+						aria-invalid={!!errors.note}
+						{...register('note')}
+					/>
+					{errors.note && (
+						<p className='text-sm text-destructive'>{errors.note.message}</p>
+					)}
+				</div>
+
+				<div className='flex justify-end'>
+					<Button type='submit'>
+						{addProvinceSales.isPending && (
+							<Loader2 className='mr-2 size-4 animate-spin' />
+						)}
+						Registrar ventas
+					</Button>
+				</div>
+			</fieldset>
 
 			{isError && (
-				<div className='rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800'>
+				<div className='mt-5 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800'>
 					No pudimos cargar las provincias.{' '}
 					<button
 						type='button'
@@ -159,18 +176,6 @@ export const AddProvinceSalesForm = () => {
 					</button>
 				</div>
 			)}
-
-			<div className='flex justify-end'>
-				<Button
-					type='submit'
-					disabled={isLoading || isError || addProvinceSales.isPending}
-				>
-					{addProvinceSales.isPending && (
-						<Loader2 className='mr-2 size-4 animate-spin' />
-					)}
-					Registrar ventas
-				</Button>
-			</div>
 		</form>
 	);
 };
