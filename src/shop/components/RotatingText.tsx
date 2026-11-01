@@ -1,24 +1,29 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {TextGenerateEffect} from '@/components/ui/text-generate-effect';
 import {cn} from '@/lib/utils';
+import {
+	DEFAULT_HOLD_MS,
+	DURATION_S,
+	EXIT_MS,
+	STAGGER_S,
+	getPhraseBuildMs,
+} from '@/shop/lib/rotating-text';
 
 interface RotatingTextProps {
 	phrases: string[];
 	holdMs?: number; // tiempo quieta, con la frase ya armada
 	startDelayMs?: number; // retraso solo de la primera frase
+	onStart?: () => void; // aviso cuando la primera frase empieza a mostrarse
 	className?: string;
 }
 
 type Phase = 'waiting' | 'in' | 'out';
 
-const DURATION_S = 0.5; // cuánto tarda cada letra en enfocarse
-const STAGGER_S = 0.2; // desfase entre letras
-const EXIT_MS = 500; // desvanecimiento al cambiar de frase
-
 export const RotatingText = ({
 	phrases,
-	holdMs = 5000,
+	holdMs = DEFAULT_HOLD_MS,
 	startDelayMs = 0,
+	onStart,
 	className,
 }: RotatingTextProps) => {
 	const [index, setIndex] = useState(0);
@@ -27,19 +32,26 @@ export const RotatingText = ({
 	);
 
 	const phrase = phrases[index] ?? '';
+	const onStartRef = useRef(onStart);
+
+	useEffect(() => {
+		onStartRef.current = onStart;
+	}, [onStart]);
 
 	// 1. Espera inicial (solo la primera vez)
 	useEffect(() => {
 		if (phase !== 'waiting') return;
-		const id = setTimeout(() => setPhase('in'), startDelayMs);
+		const id = setTimeout(() => {
+			onStartRef.current?.();
+			setPhase('in');
+		}, startDelayMs);
 		return () => clearTimeout(id);
 	}, [phase, startDelayMs]);
 
 	// 2. La frase se arma; cuando termina, espera holdMs y empieza la salida
 	useEffect(() => {
 		if (phase !== 'in' || phrases.length < 2) return;
-		const letterCount = phrase.replace(/\s/g, '').length;
-		const buildMs = (DURATION_S + (letterCount - 1) * STAGGER_S) * 1000;
+		const buildMs = getPhraseBuildMs(phrase);
 		const id = setTimeout(() => setPhase('out'), buildMs + holdMs);
 		return () => clearTimeout(id);
 	}, [phase, phrase, phrases.length, holdMs]);
