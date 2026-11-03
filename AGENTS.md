@@ -161,6 +161,7 @@ El detalle completo está en `docs/products-spec.md`. Lo esencial:
 - Dashboard: datos reales (stats por RPC `get_dashboard_stats`, últimas variantes y productos más vistos), sin mocks. Falta D6, el registro de interés (ver `docs/dashboard-spec.md`).
 - Tienda (Etapa 5) terminada: catálogo en `/store` con card por producto, panel "Filtrar y ordenar" (aside derecho con orden por precio/nombre, búsqueda, marca, categoría, slider de precio, solo ofertas y solo populares) y página de variante en `product/:slug` con carrusel. Código en `src/shop/`.
 - Carrito (Etapa 6) terminado: carrito en el cliente con Zustand y `localStorage`, aside derecho reutilizando `Sheet`, revalidación de precio y stock al abrir, insignia en el header, botón "Agregar al carrito" en la página de variante y checkout por WhatsApp. Ver `docs/cart-spec.md`.
+- Home: sección "Colección" entre el hero y "Ventas por provincia", con galería editorial estática de 9 imágenes en `public/coleccion/` (placeholders SVG por ahora). La sección es blanca y ventas por provincia usa `bg-gray-50` para alternar fondos.
 - Después: panel rápido de stock (Etapa 4, aplazada) y registro de interés del dashboard (D6).
   Actualiza esta sección al terminar cada etapa.
 

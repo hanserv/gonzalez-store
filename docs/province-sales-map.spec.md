@@ -422,15 +422,15 @@ Los totales de ventas no son dinero. No usar `formatCurrency` para ellos.
 
 ### Ubicación
 
-- La sección vive en `src/shop/pages/home/HomePage.tsx`, debajo del hero.
+- La sección vive en `src/shop/pages/home/HomePage.tsx`, debajo de la sección Colección.
 - No se agrega la ruta `/sales`, ni `SalesPage`, ni un enlace "Ventas" en `nav-items.ts` o `ShopHeader.tsx`.
 - El header es fijo, pero la sección queda debajo del hero, así que no necesita `pt-28`.
 - El footer sigue oculto en la Home. El comentario de `ShopLayout` debe decir que la Home termina con la sección de ventas, no que es solo el hero.
 
 ### `HomePage`
 
-- Envuelve la sección en un bloque `bg-white px-6 pb-16 pt-6 md:pt-10` con contenedor `mx-auto max-w-6xl`.
-- Título "Ventas por provincia" con la fuente por defecto del proyecto, `text-3xl font-bold md:text-4xl`, sin línea de acento ni párrafo debajo.
+- Envuelve la sección en un bloque `bg-gray-50 px-6 pb-16 pt-6 md:pt-10` con contenedor `mx-auto max-w-6xl`. El gris alterna con el blanco de la sección Colección que va arriba.
+- Título "Ventas por provincia" con la fuente por defecto del proyecto, `text-3xl font-bold md:text-4xl`, sin línea de acento ni párrafo debajo. Arriba lleva la etiqueta pequeña "Nuestro alcance" en rojo, centrada, con el mismo estilo de la etiqueta de la sección Colección.
 - Debajo, `ProvinceSalesSection`.
 
 ### `ProvinceSalesSection`
