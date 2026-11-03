@@ -9,9 +9,11 @@ interface ProductGalleryProps {
 
 export const ProductGallery = ({images, alt}: ProductGalleryProps) => {
 	const [selectedIndex, setSelectedIndex] = useState(0);
+	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
 	useEffect(() => {
 		setSelectedIndex(0);
+		setHoveredIndex(null);
 	}, [images]);
 
 	if (images.length === 0) {
@@ -20,7 +22,7 @@ export const ProductGallery = ({images, alt}: ProductGalleryProps) => {
 		);
 	}
 
-	const currentImage = images[selectedIndex];
+	const displayedIndex = hoveredIndex ?? selectedIndex;
 
 	return (
 		<div className='flex flex-col gap-3 lg:flex-row lg:items-start'>
@@ -33,7 +35,14 @@ export const ProductGallery = ({images, alt}: ProductGalleryProps) => {
 							<button
 								key={image.id}
 								type='button'
-								onClick={() => setSelectedIndex(index)}
+								onClick={() => {
+									setSelectedIndex(index);
+									setHoveredIndex(null);
+								}}
+								onMouseEnter={() => setHoveredIndex(index)}
+								onMouseLeave={() => setHoveredIndex(null)}
+								onFocus={() => setHoveredIndex(index)}
+								onBlur={() => setHoveredIndex(null)}
 								aria-label={`Ver imagen ${index + 1}`}
 								aria-pressed={isActive}
 								className={cn(
@@ -54,11 +63,22 @@ export const ProductGallery = ({images, alt}: ProductGalleryProps) => {
 			)}
 
 			<div className='order-1 relative aspect-square w-full overflow-hidden rounded-2xl bg-[#F1F3F5] lg:order-2'>
-				<img
-					src={currentImage.url}
-					alt={alt}
-					className='h-full w-full object-contain p-4 md:p-6'
-				/>
+				{images.map((image, index) => {
+					const isDisplayed = index === displayedIndex;
+
+					return (
+						<img
+							key={image.id}
+							src={image.url}
+							alt={isDisplayed ? alt : ''}
+							aria-hidden={isDisplayed ? undefined : true}
+							className={cn(
+								'absolute inset-0 h-full w-full object-contain p-4 transition-opacity duration-300 md:p-6',
+								isDisplayed ? 'opacity-100' : 'opacity-0',
+							)}
+						/>
+					);
+				})}
 			</div>
 		</div>
 	);
