@@ -1,5 +1,5 @@
+import {Reveal} from '@/shop/components/Reveal';
 import {careerStages} from '@/shop/data/career-stages';
-import {Reveal} from './Reveal';
 import {CareerTimelineItem} from './CareerTimelineItem';
 
 export const CareerTimeline = () => {

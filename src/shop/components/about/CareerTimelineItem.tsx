@@ -1,6 +1,6 @@
 import {cn} from '@/lib/utils';
+import {Reveal} from '@/shop/components/Reveal';
 import type {CareerStage} from '@/shop/data/career-stages';
-import {Reveal} from './Reveal';
 
 interface CareerTimelineItemProps {
 	stage: CareerStage;
