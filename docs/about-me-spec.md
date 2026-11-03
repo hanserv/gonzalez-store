@@ -334,19 +334,19 @@ Para las imágenes:
 
 La sección debe ser completamente comprensible y funcional sin animaciones.
 
-### 10.1. Entrada al hacer scroll (opcional)
+### 10.1. Entrada al hacer scroll
 
-Se puede animar la aparición de los hitos mediante:
+Implementado con `IntersectionObserver` y transiciones de CSS (`opacity`, `translate` y `scale`), sin dependencias nuevas.
 
-- Transición de opacidad.
-- Desplazamiento vertical pequeño.
-- Duración aproximada de 400–700 ms.
-
-Evitar rebotes, desplazamientos grandes y efectos que distraigan.
-
-El contenido no debe permanecer oculto si falla el JavaScript.
-
-Respetar `prefers-reduced-motion: reduce`.
+- Cada tarjeta de texto, foto y punto de la línea se revela cuando el 18% de su altura entra en el viewport.
+- En escritorio (1024 px o más), la tarjeta y la foto entran desde el lado donde están. En móvil y tablet entran con un fade-up.
+- Dentro de un mismo hito, la foto aparece 150 ms después de la tarjeta. El punto de la línea aparece junto con la tarjeta.
+- El título y su subrayado entran con fade-up, con 150 ms entre ambos.
+- La duración es de 700 ms con `ease-out`, sin rebotes.
+- La animación se ejecuta una sola vez por elemento: al cruzar el primer umbral, el observer se desconecta.
+- Con `prefers-reduced-motion: reduce` los elementos se muestran de inmediato y las transiciones se desactivan.
+- El ocultamiento inicial vive solo en las clases de React, no en el CSS global. Si `IntersectionObserver` no está disponible, el contenido se muestra de inmediato.
+- Solo se usan `opacity`, `translate` y `scale`, así no hay reflows ni saltos de layout.
 
 ### 10.2. Línea progresiva (opcional)
 

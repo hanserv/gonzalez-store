@@ -1,5 +1,6 @@
 import {cn} from '@/lib/utils';
 import type {CareerStage} from '@/shop/data/career-stages';
+import {Reveal} from './Reveal';
 
 interface CareerTimelineItemProps {
 	stage: CareerStage;
@@ -10,6 +11,9 @@ interface CareerTimelineItemProps {
 export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 	const isImageRight = index % 2 === 0;
 
+	const cardDirection = isImageRight ? 'left' : 'right';
+	const imageDirection = isImageRight ? 'right' : 'left';
+
 	return (
 		<div className='relative grid grid-cols-1 items-center gap-8 py-12 md:gap-12 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center lg:gap-0 lg:py-24'>
 			{/* Línea central y nodo (solo escritorio) */}
@@ -17,9 +21,10 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 				className='absolute left-6 top-0 hidden h-full w-px -translate-x-1/2 bg-foreground/10 lg:left-1/2 lg:block'
 				aria-hidden='true'
 			/>
-			<div
-				className='absolute left-6 top-1/2 hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gonzalez-red lg:left-1/2 lg:block'
+			<Reveal
+				scale
 				aria-hidden='true'
+				className='absolute left-6 top-1/2 hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gonzalez-red lg:left-1/2 lg:block'
 			/>
 
 			{/* Línea lateral y nodo (móvil/tablet) */}
@@ -27,9 +32,10 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 				className='absolute left-6 top-0 h-full w-px -translate-x-1/2 bg-foreground/10 lg:hidden'
 				aria-hidden='true'
 			/>
-			<div
-				className='absolute left-6 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gonzalez-red lg:hidden'
+			<Reveal
+				scale
 				aria-hidden='true'
+				className='absolute left-6 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gonzalez-red lg:hidden'
 			/>
 
 			{/* Columna texto */}
@@ -41,7 +47,8 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 						: 'lg:col-start-3 lg:justify-self-start lg:pl-6',
 				)}
 			>
-				<div
+				<Reveal
+					direction={cardDirection}
 					className={cn(
 						'w-full max-w-md rounded-lg bg-white p-6 shadow-xs ring-1 ring-foreground/10',
 						isImageRight ? 'lg:text-right' : 'lg:text-left',
@@ -75,7 +82,7 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 					<p className='text-base leading-relaxed text-neutral-600'>
 						{stage.description}
 					</p>
-				</div>
+				</Reveal>
 			</div>
 
 			{/* Columna imagen */}
@@ -87,7 +94,11 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 						: 'lg:col-start-1 lg:justify-self-end lg:pr-6',
 				)}
 			>
-				<div className='w-full max-w-[400px] overflow-hidden rounded-xl ring-1 ring-foreground/10'>
+				<Reveal
+					delay={150}
+					direction={imageDirection}
+					className='w-full max-w-[400px] overflow-hidden rounded-xl ring-1 ring-foreground/10'
+				>
 					<div className='aspect-[4/3] w-full'>
 						<img
 							src={stage.image}
@@ -96,7 +107,7 @@ export const CareerTimelineItem = ({stage, index}: CareerTimelineItemProps) => {
 							loading='lazy'
 						/>
 					</div>
-				</div>
+				</Reveal>
 			</div>
 		</div>
 	);
