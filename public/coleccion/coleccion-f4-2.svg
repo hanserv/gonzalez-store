@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" role="img" aria-label="Placeholder F4 2, proporcion 1:1">
+	<defs>
+		<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0" stop-color="#f5f1e9"/>
+			<stop offset="1" stop-color="#e4ddd0"/>
+		</linearGradient>
+		<pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+			<path d="M80 0H0V80" fill="none" stroke="#d8d0c2" stroke-width="1"/>
+		</pattern>
+	</defs>
+	<rect width="1000" height="1000" fill="url(#bg)"/>
+	<rect width="1000" height="1000" fill="url(#grid)"/>
+	<rect x="28" y="28" width="944" height="944" fill="none" stroke="#c9a961" stroke-width="2" opacity="0.65"/>
+	<circle cx="500" cy="480" r="150" fill="none" stroke="#c9a961" stroke-width="2" opacity="0.55"/>
+	<text x="500" y="472" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#800020" letter-spacing="6">F4 · 2</text>
+	<text x="500" y="526" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#6b6357" letter-spacing="4">1:1</text>
+	<text x="500" y="928" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#6b6357" letter-spacing="8">COLECCIÓN</text>
+</svg>
