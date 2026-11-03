@@ -20,7 +20,7 @@ export const CollectionPhoto = ({
 	return (
 		<div
 			className={cn(
-				'group relative w-full min-w-0 overflow-hidden rounded-xl bg-neutral-100',
+				'group relative w-full min-w-0 overflow-hidden rounded-xl bg-black',
 				aspectClassName,
 				className,
 			)}
