@@ -27,6 +27,7 @@ Este repositorio es una app web en React + TypeScript + Vite para una tienda de 
 - No instalar ni eliminar dependencias sin preguntarme.
 - No modificar archivos fuera del alcance de lo pedido.
 - Mantener el estilo de código existente (tabs, comillas simples).
+- Commits: mensaje en inglés con el formato `tipo: descripción`, sin scope entre paréntesis. Por ejemplo `feat: preview secondary images on hover`, nunca `feat(shop): ...`.
 - Después de un cambio o de una feature relativamente importante, muestra siempre las opciones de commit (mensaje sugerido y archivos a incluir). El usuario hace los commits.
 
 ## Comandos
