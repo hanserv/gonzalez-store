@@ -12,20 +12,22 @@ export const CollectionRowFeature = () => {
 				/>
 			</Reveal>
 
-			<div className='grid grid-cols-2 gap-5 md:grid-cols-1 md:grid-rows-2'>
-				{collectionFeatureRow.small.map((image, index) => (
-					<Reveal
-						key={image.src}
-						delay={(index + 1) * 130}
-						className='min-h-0 min-w-0 md:h-full'
-					>
-						<CollectionPhoto
-							image={image}
-							aspectClassName='aspect-[16/10]'
-							className='md:aspect-auto md:h-full'
-						/>
-					</Reveal>
-				))}
+			<div className='relative min-w-0 md:h-full'>
+				<div className='grid grid-cols-2 gap-5 md:absolute md:inset-0 md:grid-cols-1 md:grid-rows-2'>
+					{collectionFeatureRow.small.map((image, index) => (
+						<Reveal
+							key={image.src}
+							delay={(index + 1) * 130}
+							className='min-h-0 min-w-0 md:h-full'
+						>
+							<CollectionPhoto
+								image={image}
+								aspectClassName='aspect-[16/10]'
+								className='md:aspect-auto md:h-full'
+							/>
+						</Reveal>
+					))}
+				</div>
 			</div>
 		</div>
 	);
