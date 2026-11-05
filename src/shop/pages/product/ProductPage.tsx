@@ -188,7 +188,7 @@ export const ProductPage = () => {
 
 								<div>
 									<p className='mb-2 text-sm font-medium text-[#111418]'>
-										Color: {variant.title}
+										Color: {variant.name}
 									</p>
 									<SiblingVariants
 										currentVariantId={variant.id}

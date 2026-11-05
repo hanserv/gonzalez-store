@@ -26,6 +26,7 @@ const mapSibling = (
 export const mapShopVariant = (row: ShopVariantRow): ShopVariant => ({
 	id: row.id,
 	slug: row.slug,
+	name: row.name,
 	title: `${row.product?.name ?? ''} ${row.name}`.trim(),
 	description: row.description,
 	price: row.price,
