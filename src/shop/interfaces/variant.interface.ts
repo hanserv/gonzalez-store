@@ -20,6 +20,7 @@ export interface ShopVariantSibling {
 export interface ShopVariant {
 	id: string;
 	slug: string;
+	name: string;
 	title: string;
 	description: string | null;
 	price: number;

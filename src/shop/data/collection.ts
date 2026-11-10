@@ -19,28 +19,27 @@ export type CollectionOffsetItem = {
 export const collectionCopy = {
 	eyebrow: 'Colección',
 	title: 'Cada par cuenta una historia',
-	panoramaPhrase: 'El juego empieza en los pies.',
 	ctaLabel: 'Ver tienda',
 };
 
 export const collectionVerticalRow: CollectionImage[] = [
 	{
-		src: '/coleccion/coleccion-f1-1.svg',
-		alt: 'Tenis de la colección sobre una superficie clara',
+		src: '/coleccion/coleccion-f1-1.jpeg',
+		alt: '',
 		width: 900,
 		height: 1200,
 		sizes: '(min-width: 640px) 33vw, 78vw',
 	},
 	{
-		src: '/coleccion/coleccion-f1-2.svg',
-		alt: 'Detalle de la suela y el acabado de un par de tenis',
+		src: '/coleccion/coleccion-f1-2.jpeg',
+		alt: '',
 		width: 900,
 		height: 1200,
 		sizes: '(min-width: 640px) 33vw, 78vw',
 	},
 	{
-		src: '/coleccion/coleccion-f1-3.svg',
-		alt: 'Tenis en movimiento vistos desde un ángulo lateral',
+		src: '/coleccion/coleccion-f1-3.jpeg',
+		alt: '',
 		width: 900,
 		height: 1200,
 		sizes: '(min-width: 640px) 33vw, 78vw',
@@ -49,23 +48,23 @@ export const collectionVerticalRow: CollectionImage[] = [
 
 export const collectionFeatureRow = {
 	large: {
-		src: '/coleccion/coleccion-f2-1.svg',
-		alt: 'Tenis de la colección en una composición horizontal',
+		src: '/coleccion/coleccion-f2-1.jpeg',
+		alt: '',
 		width: 1440,
 		height: 900,
 		sizes: '(min-width: 768px) 66vw, 100vw',
 	} satisfies CollectionImage,
 	small: [
 		{
-			src: '/coleccion/coleccion-f2-2.svg',
-			alt: 'Detalle del empeine de un tenis de la colección',
+			src: '/coleccion/coleccion-f2-2.jpeg',
+			alt: '',
 			width: 720,
 			height: 450,
 			sizes: '(min-width: 768px) 33vw, 50vw',
 		},
 		{
-			src: '/coleccion/coleccion-f2-3.svg',
-			alt: 'Detalle del cordón y la lengüeta de un tenis',
+			src: '/coleccion/coleccion-f2-3.jpeg',
+			alt: '',
 			width: 720,
 			height: 450,
 			sizes: '(min-width: 768px) 33vw, 50vw',
@@ -74,8 +73,8 @@ export const collectionFeatureRow = {
 };
 
 export const collectionPanorama: CollectionImage = {
-	src: '/coleccion/coleccion-f3-1.svg',
-	alt: 'Panorámica de la colección con varios pares de tenis',
+	src: 'gonzalez-logo-white.png',
+	alt: '',
 	width: 2100,
 	height: 900,
 	sizes: '100vw',
@@ -87,20 +86,20 @@ export const collectionOffsetRow: CollectionOffsetItem[] = [
 		title: 'Estilo de calle',
 		description: 'Siluetas que acompañan el día a día.',
 		image: {
-			src: '/coleccion/coleccion-f4-1.svg',
-			alt: 'Tenis de estilo urbano de la colección',
+			src: '/coleccion/coleccion-f4-1.jpeg',
+			alt: '',
 			width: 1000,
 			height: 1000,
 			sizes: '(min-width: 768px) 50vw, 100vw',
 		},
 	},
 	{
-		id: 'ritmo-propio',
-		title: 'Ritmo propio',
+		id: 'estilo-propio',
+		title: 'Estilo propio',
 		description: 'Piezas pensadas para moverte sin prisa.',
 		image: {
-			src: '/coleccion/coleccion-f4-2.svg',
-			alt: 'Tenis de ritmo diario de la colección',
+			src: '/coleccion/coleccion-f4-2.jpeg',
+			alt: '',
 			width: 1000,
 			height: 1000,
 			sizes: '(min-width: 768px) 50vw, 100vw',

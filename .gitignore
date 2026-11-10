@@ -45,5 +45,11 @@ test-results/
 .DS_Store
 Thumbs.db
 
-docs/sql/
+# Local agent and docs files (kept on disk, never published)
+.agents/
+AGENTS.md
+docs/
+opencode.json
+skills-lock.json
+
 supabase/.temp/
