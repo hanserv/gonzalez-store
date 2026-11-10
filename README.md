@@ -1,78 +1,25 @@
-# React + TypeScript + Vite
+# Gonzalez Peña
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Tienda de tenis y ropa con catálogo público, carrito y pedido por WhatsApp, más un panel de administración para gestionar productos, variantes, imágenes y stock.
 
-Currently, two official plugins are available:
+**Sitio en vivo: [gonzalez-pena.vercel.app](https://gonzalez-pena.vercel.app/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## El proyecto
 
-## React Compiler
+La aplicación tiene tres zonas:
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **Tienda**: inicio con hero, colección editorial, mapa de ventas por provincia y página "Sobre nosotros". El catálogo vive en `/store` con búsqueda, filtros por marca, categoría, precio, ofertas y populares, además de orden por precio o nombre. Cada producto abre su página en `product/:slug` con carrusel de imágenes, selector de talla y las demás variantes del producto.
+- **Carrito**: se guarda en el navegador, se abre en un panel lateral desde el header y revalida precio y stock al abrirse. El checkout arma el pedido y lo envía por WhatsApp. No hay pasarela de pago ni descuento automático de stock.
+- **Administración**: dashboard con métricas reales y CRUD de marcas, categorías, productos, variantes, tallas e imágenes. El stock se ajusta a mano y el estado activo de una variante se controla desde el detalle del producto.
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+## Stack
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+- React 19, TypeScript y Vite.
+- React Router.
+- TanStack React Query para datos remotos y caché.
+- Supabase para autenticación, base de datos y Storage.
+- React Hook Form y Zod para formularios.
+- Zustand para el carrito y la sesión.
+- Tailwind CSS v4 y shadcn/ui sobre Base UI.
+- Leaflet para el mapa de ventas por provincia.
+- Sonner para notificaciones.
