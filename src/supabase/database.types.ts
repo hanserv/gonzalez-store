@@ -109,6 +109,32 @@ export type Database = {
           },
         ]
       }
+      product_views_daily: {
+        Row: {
+          product_id: string
+          viewed_on: string
+          views: number
+        }
+        Insert: {
+          product_id: string
+          viewed_on: string
+          views?: number
+        }
+        Update: {
+          product_id?: string
+          viewed_on?: string
+          views?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_views_daily_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           brand_id: string
@@ -306,6 +332,18 @@ export type Database = {
           total_categories: number
           total_products: number
         }[]
+      }
+      get_top_viewed_products: {
+        Args: { p_days?: number; p_limit?: number }
+        Returns: {
+          id: string
+          name: string
+          views: number
+        }[]
+      }
+      record_product_view: {
+        Args: { p_variant_id: string }
+        Returns: undefined
       }
     }
     Enums: {

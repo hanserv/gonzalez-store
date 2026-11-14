@@ -5,6 +5,7 @@ import {toast} from 'sonner';
 import {Button} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';
 import {useVariantBySlug} from '@/shop/hooks/variants/useVariantBySlug';
+import {useRecordProductView} from '@/shop/hooks/analytics/useRecordProductView';
 import {formatCurrency} from '@/shop/lib/format';
 import {useCartStore} from '@/shop/stores/cart.store';
 import {ProductGallery} from '@/shop/components/product/ProductGallery';
@@ -33,6 +34,7 @@ const ProductSkeleton = () => (
 export const ProductPage = () => {
 	const {slug} = useParams();
 	const {data, isLoading, isError, refetch} = useVariantBySlug(slug);
+	useRecordProductView(data?.variant.id, data?.variant.productId);
 	const addItem = useCartStore((state) => state.addItem);
 	const openCart = useCartStore((state) => state.openCart);
 	const items = useCartStore((state) => state.items);

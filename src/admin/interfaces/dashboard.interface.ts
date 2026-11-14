@@ -36,9 +36,11 @@ export interface DashboardLatestVariant {
 	isActive: boolean;
 }
 
+export type TopViewedProductRow =
+	Database['public']['Functions']['get_top_viewed_products']['Returns'][number];
+
 export interface TopViewedProduct {
 	id: string;
 	name: string;
-	category: string;
 	views: number;
 }

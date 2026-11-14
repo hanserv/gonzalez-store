@@ -3,6 +3,8 @@ import type {
 	DashboardLatestVariantRow,
 	DashboardStats,
 	DashboardStatsRow,
+	TopViewedProduct,
+	TopViewedProductRow,
 } from '@/admin/interfaces/dashboard.interface';
 
 export const mapDashboardStats = (row: DashboardStatsRow): DashboardStats => ({
@@ -28,3 +30,11 @@ export const mapDashboardLatestVariant = (
 		isActive: row.is_active,
 	};
 };
+
+export const mapDashboardTopViewedProduct = (
+	row: TopViewedProductRow,
+): TopViewedProduct => ({
+	id: row.id,
+	name: row.name,
+	views: row.views,
+});
