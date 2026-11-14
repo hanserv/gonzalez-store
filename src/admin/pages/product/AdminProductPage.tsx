@@ -9,6 +9,7 @@ import type {ProductVariant} from '@/admin/interfaces/product-variant.interface'
 import {buttonVariants, Button} from '@/components/ui/button';
 import {Skeleton} from '@/components/ui/skeleton';
 import {DeleteVariantDialog} from './ui/DeleteVariantDialog';
+import {EditableProductName} from './ui/EditableProductName';
 import {ProductVariantsTable} from './ui/ProductVariantsTable';
 
 export const AdminProductPage = () => {
@@ -99,7 +100,7 @@ const AdminProductContent = ({productId}: AdminProductContentProps) => {
 							<p className='text-sm text-muted-foreground'>
 								{product.brandName} · {product.categoryName}
 							</p>
-							<h2 className='text-2xl font-semibold'>{product.name}</h2>
+							<EditableProductName productId={product.id} name={product.name} />
 							<p className='text-sm text-muted-foreground'>
 								Este producto agrupa todas sus variantes. La primera variante
 								activa es la portada del catálogo.
